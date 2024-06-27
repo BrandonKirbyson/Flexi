@@ -1,42 +1,32 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
-	import { goto } from '$app/navigation';
-	import { session } from '@/stores/user';
 	import type { LayoutData } from './$types';
 	export let data: LayoutData;
-
-	let loading: boolean = true;
-	let loggedIn: boolean = false;
-
-	session.subscribe((cur) => {
-		loading = cur?.loading || false;
-		loggedIn = cur?.loggedIn || false;
-	});
-
-	onMount(async () => {
-		const user = await data.getAuthUser();
-
-		const loggedIn = !!user && user?.emailVerified;
-		session.update((cur) => {
-			loading = false;
-			return {
-				...cur,
-				user,
-				loggedIn,
-				loading: false
-			};
-		});
-
-		if (!loggedIn) goto('/login');
-	});
 </script>
 
-{#if loading}
-	<div>Loading...</div>
-{:else}
-	<div>
-		Logged in: {loggedIn}
-		<slot />
-	</div>
-{/if}
+<slot></slot>
+
+<style lang="scss">
+	@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+	:root {
+		--bg: #fff;
+		--bg-secondary: #fafbfc;
+		--bg-highlight: red;
+		--text-highlight: #000;
+
+		--text: #21262c;
+		--text-secondary: #3c3c3c;
+		--primary: #2aa744;
+		--secondary: #dcf0d7ec;
+
+		--border: #f2f1f1;
+
+		--logo-font: 'Pacifico', cursive;
+		--font: 'Inter', sans-serif;
+
+		background-color: var(--bg);
+		color: var(--text);
+		font-family: var(--font);
+	}
+</style>

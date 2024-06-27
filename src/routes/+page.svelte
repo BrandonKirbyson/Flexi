@@ -1,19 +1,13 @@
 <script lang="ts">
 	import { auth } from '$lib/firebase/firebase';
 	import { signOut } from 'firebase/auth';
-	import { session } from '../stores/user';
 
-	function logout() {
-		signOut(auth)
-			.then(() => {
-				session.set({
-					loggedIn: false,
-					user: null
-				});
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+	async function logout() {
+		try {
+			await signOut(auth);
+		} catch (error) {
+			console.error(error);
+		}
 	}
 </script>
 

@@ -4,6 +4,7 @@ import {
 	PUBLIC_FB_APP_ID,
 	PUBLIC_FB_AUTH_DOMAIN,
 	PUBLIC_FB_AUTH_PORT,
+	PUBLIC_FB_FIRESTORE_PORT,
 	PUBLIC_FB_LOCAL_URL,
 	PUBLIC_FB_MEASUREMENT_ID,
 	PUBLIC_FB_MESSAGE_SENDER_ID,
@@ -14,7 +15,8 @@ import type { FirebaseApp } from 'firebase/app';
 import { initializeApp } from 'firebase/app';
 import type { Auth } from 'firebase/auth';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
-import type { Firestore } from 'firebase/firestore';
+import { connectFirestoreEmulator, getFirestore, type Firestore } from 'firebase/firestore';
+import { initAuth } from './auth';
 
 export let db: Firestore;
 export let app: FirebaseApp;
@@ -40,10 +42,13 @@ export const initializeFirebase = () => {
 	if (!app) {
 		app = initializeApp(firebaseConfig);
 		auth = getAuth(app);
+		db = getFirestore(app);
 
 		if (firebaseConfig.useEmulator) {
-			console.log(`${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`);
 			connectAuthEmulator(auth, `http://${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`);
+			connectFirestoreEmulator(db, PUBLIC_FB_LOCAL_URL, parseInt(PUBLIC_FB_FIRESTORE_PORT, 10));
 		}
+
+		initAuth(auth);
 	}
 };

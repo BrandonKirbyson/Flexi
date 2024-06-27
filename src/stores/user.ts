@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-type User = {
+type AuthUser = {
 	email?: string | null;
 	displayName?: string | null;
 	photoURL?: string | null;
@@ -8,9 +8,11 @@ type User = {
 };
 
 export type SessionState = {
-	user: User | null;
-	loading?: boolean;
-	loggedIn?: boolean;
+	user: AuthUser | null;
+	loading: boolean;
 };
 
-export const session = writable<SessionState>();
+export const session = writable<SessionState>({
+	user: null,
+	loading: true
+});
