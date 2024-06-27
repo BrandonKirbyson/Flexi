@@ -1,12 +1,12 @@
 <script lang="ts">
-	import FlexiHeader from './FlexiHeader.svelte';
+	import Header from './Header.svelte';
 </script>
 
 <div class="wrapper">
 	<slot name="sidebar"></slot>
 
 	<div class="content">
-		<FlexiHeader />
+		<Header />
 		<slot name="content"></slot>
 	</div>
 </div>
