@@ -9,6 +9,14 @@
 	@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
+	:global(body) {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		max-height: 100vh;
+		height: 100vh;
+	}
+
 	:root {
 		--bg: #fff;
 		--bg-secondary: #fafbfc;

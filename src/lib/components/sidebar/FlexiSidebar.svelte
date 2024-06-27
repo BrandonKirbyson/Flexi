@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { signOut } from 'firebase/auth';
+	import { page } from '$app/stores';
 
-	export let tabs: string[];
-	// $: url = $page.url.pathname;
+	$: url = $page.url.pathname.split('/').pop();
 </script>
 
 <div class="sidebar-wrapper">
@@ -12,19 +11,7 @@
 	</div>
 	<!-- <div class="divider"></div> -->
 	<div class="tabs">
-		{#each tabs as tab}
-			<a href={tab}>
-				<button>
-					<div class="button-wrapper">
-						<div class="icon-wrapper">
-							<!-- <svelte:component this={tab.icon} /> -->
-						</div>
-						{tab}
-					</div>
-				</button>
-			</a>
-		{/each}
-		<button on:click={() => signOut}>Logout</button>
+		<slot />
 	</div>
 </div>
 
@@ -40,13 +27,14 @@
 			margin-right: 0.5rem;
 		}
 	}
+
 	.sidebar-wrapper {
 		background-color: var(--bg);
 		display: flex;
 		flex-direction: column;
 		min-height: 100%;
 
-		width: 15rem;
+		min-width: 20rem;
 
 		border: none;
 		border-right: 2px solid var(--border);
