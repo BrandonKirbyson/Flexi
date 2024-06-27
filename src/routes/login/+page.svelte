@@ -1,5 +1,4 @@
 <script lang="ts">
-	// login/+page.svelte
 	import { goto } from '$app/navigation';
 	import { auth } from '$lib/firebase/firebase';
 	import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
@@ -7,7 +6,6 @@
 
 	async function loginWithGoogle() {
 		const provider = new GoogleAuthProvider();
-		console.log('signingin up');
 		await signInWithPopup(auth, provider)
 			.then((result) => {
 				const { displayName, email, photoURL, uid } = result?.user;
