@@ -1,10 +1,8 @@
+import { goto } from '$app/navigation';
 import { session } from '@/stores/user';
-import { redirect } from '@sveltejs/kit';
 
 export async function load() {
-	session.subscribe((user) => {
-		if (!user) throw redirect(302, '/login');
+	session.subscribe((session) => {
+		if (!session.user && !session.loading) goto('/login');
 	});
-
-	// unsubscribe();
 }

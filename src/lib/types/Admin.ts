@@ -1,10 +1,9 @@
 import type { AuthUser } from './User';
 import type { Name } from './Util';
 
-export interface TeacherData {
+export interface AdminData {
 	email: string;
 	name: Name;
-	class: string;
 }
 
-export interface TeacherUser extends TeacherData, AuthUser {}
+export interface AdminUser extends AdminData, AuthUser {}

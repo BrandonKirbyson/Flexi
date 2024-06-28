@@ -1,4 +1,7 @@
 <script>
+	import { studentData } from '@/stores/user';
 </script>
 
-<div></div>
+<div>
+	{JSON.stringify($studentData)}
+</div>

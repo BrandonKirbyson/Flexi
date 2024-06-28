@@ -1,18 +1,14 @@
+import type { AdminUser } from '@/lib/types/Admin';
+import type { StudentUser } from '@/lib/types/Student';
+import type { TeacherUser } from '@/lib/types/Teacher';
+import type { SessionState } from '@/lib/types/User';
 import { writable } from 'svelte/store';
 
-type AuthUser = {
-	email?: string | null;
-	displayName?: string | null;
-	photoURL?: string | null;
-	uid?: string | null;
-};
-
-export type SessionState = {
-	user: AuthUser | null;
-	loading: boolean;
-};
-
 export const session = writable<SessionState>({
-	user: null,
+	uid: null,
 	loading: true
 });
+
+export const studentData = writable<StudentUser | null>(null);
+export const teacherData = writable<TeacherUser | null>(null);
+export const adminData = writable<AdminUser | null>(null);
