@@ -1,7 +1,8 @@
 import { browser } from '$app/environment';
 import { initializeFirebase } from '$lib/firebase/firebase';
+import type { LoadEvent } from '@sveltejs/kit';
 
-export async function load({ url }) {
+export function load(event: LoadEvent) {
 	if (browser) {
 		try {
 			initializeFirebase();
@@ -9,7 +10,8 @@ export async function load({ url }) {
 			console.error(ex);
 		}
 	}
+
 	return {
-		url: url.pathname
+		url: event.url.pathname
 	};
 }

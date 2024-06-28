@@ -1,8 +1,8 @@
 import { goto } from '$app/navigation';
 import { session } from '@/stores/user';
 
-export async function load() {
+export function load() {
 	session.subscribe((session) => {
-		if (!session.user && !session.loading) goto('/login');
+		if (!session.loading && !session.uid) void goto('/login');
 	});
 }

@@ -1,10 +1,10 @@
 import { session } from '@/stores/user';
 import { redirect } from '@sveltejs/kit';
 
-export const load = async () => {
+export const load = () => {
 	const unsubscribe = session.subscribe((user) => {
-		if (!user) {
-			throw redirect(302, '/login');
+		if (!user.loading && !user.uid) {
+			redirect(302, '/login');
 		}
 	});
 

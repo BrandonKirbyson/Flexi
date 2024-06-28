@@ -39,16 +39,17 @@ export const initializeFirebase = () => {
 	if (!browser) {
 		throw new Error("Can't use the Firebase client on the server.");
 	}
-	if (!app) {
-		app = initializeApp(firebaseConfig);
-		auth = getAuth(app);
-		db = getFirestore(app);
 
-		if (firebaseConfig.useEmulator) {
-			connectAuthEmulator(auth, `http://${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`);
-			connectFirestoreEmulator(db, PUBLIC_FB_LOCAL_URL, parseInt(PUBLIC_FB_FIRESTORE_PORT, 10));
-		}
+	// if (!app) {
+	app = initializeApp(firebaseConfig);
+	auth = getAuth(app);
+	db = getFirestore(app);
 
-		initAuth(auth);
+	if (firebaseConfig.useEmulator) {
+		connectAuthEmulator(auth, `http://${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`);
+		connectFirestoreEmulator(db, PUBLIC_FB_LOCAL_URL, parseInt(PUBLIC_FB_FIRESTORE_PORT, 10));
 	}
+
+	initAuth(auth);
+	// }
 };

@@ -10,20 +10,25 @@ import type { ValueOf } from '../types/Util';
 import { db } from './firebase';
 
 export function initAuth(auth: Auth) {
-	onAuthStateChanged(auth, (user) => {
+	async function authFn(user: User | null) {
 		if (user) {
 			session.set({
 				uid: user.uid,
 				loading: false
 			});
 
-			fetchCurrentUserData(user);
+			await fetchCurrentUserData(user);
 		} else {
 			session.set({
 				uid: null,
 				loading: false
 			});
 		}
+	}
+	onAuthStateChanged(auth, (user) => {
+		void (async () => {
+			await authFn(user);
+		})();
 	});
 }
 
@@ -39,15 +44,13 @@ async function fetchCurrentUserData(user: User) {
 	const userType = docRef.data().type as UserType;
 	const { type: _, ...data } = docRef.data();
 
-	if (userType === undefined) throw new Error('User type not found');
-
 	const authUser: AuthUser = {
 		uid: user.uid,
 		profileUrl: user.photoURL
 	};
 
 	switch (userType) {
-		case UserType.Student:
+		case UserType.Student: {
 			const student: StudentData = data as StudentData;
 
 			studentData.set({
@@ -55,7 +58,8 @@ async function fetchCurrentUserData(user: User) {
 				...student
 			} as StudentUser);
 			break;
-		case UserType.Teacher:
+		}
+		case UserType.Teacher: {
 			const teacher: TeacherData = data as TeacherData;
 
 			teacherData.set({
@@ -63,12 +67,14 @@ async function fetchCurrentUserData(user: User) {
 				...teacher
 			});
 			break;
-		case UserType.Admin:
+		}
+		case UserType.Admin: {
 			const admin: AdminData = data as AdminData;
 
 			adminData.set({
 				...authUser,
 				...admin
 			});
+		}
 	}
 }
