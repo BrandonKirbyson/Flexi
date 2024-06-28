@@ -1,6 +1,6 @@
 import { adminData, session, studentData, teacherData } from '@/stores/user';
 import { onAuthStateChanged, type Auth, type User } from 'firebase/auth';
-import { CollectionReference, collection, doc, getDoc } from 'firebase/firestore';
+import { CollectionReference, collection, getDocs, limit, query, where } from 'firebase/firestore';
 import type { AdminData } from '../types/Admin';
 import type { StudentData, StudentUser } from '../types/Student';
 import type { TeacherData } from '../types/Teacher';
@@ -10,35 +10,34 @@ import type { ValueOf } from '../types/Util';
 import { db } from './firebase';
 
 export function initAuth(auth: Auth) {
-	async function authFn(user: User | null) {
+	onAuthStateChanged(auth, (user) => {
 		if (user) {
 			session.set({
 				uid: user.uid,
 				loading: false
 			});
 
-			await fetchCurrentUserData(user);
+			fetchCurrentUserData(user);
 		} else {
 			session.set({
 				uid: null,
 				loading: false
 			});
 		}
-	}
-	onAuthStateChanged(auth, (user) => {
-		void (async () => {
-			await authFn(user);
-		})();
 	});
 }
 
-type Union = StudentData & TeacherData & AdminData;
-const userCollection = collection(db, 'users') as CollectionReference<{
-	[_ in keyof (Union & { type: string })]: ValueOf<Union> | UserType;
-}>;
-
 async function fetchCurrentUserData(user: User) {
-	const docRef = await getDoc(doc(userCollection, user.uid));
+	type Union = StudentData & TeacherData & AdminData;
+	if (!db) throw new Error('Firestore not initialized');
+	const userCollection = collection(db, 'users') as CollectionReference<{
+		[_ in keyof (Union & { type: string })]: ValueOf<Union> | UserType;
+	}>;
+
+	if (!user.email) throw new Error('User email not found');
+
+	const q = query(userCollection, where('email', '==', user.email), limit(1));
+	const docRef = (await getDocs(q)).docs[0];
 	if (!docRef.exists()) throw new Error('User not found');
 
 	const userType = docRef.data().type as UserType;

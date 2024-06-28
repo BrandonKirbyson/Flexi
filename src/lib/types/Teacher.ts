@@ -1,9 +1,6 @@
-import type { AuthUser } from './User';
-import type { Name } from './Util';
+import type { AuthUser, BaseUser } from './User';
 
-export interface TeacherData {
-	email: string;
-	name: Name;
+export interface TeacherData extends BaseUser {
 	class: string;
 }
 

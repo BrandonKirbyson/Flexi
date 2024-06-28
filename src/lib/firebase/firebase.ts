@@ -15,12 +15,19 @@ import type { FirebaseApp } from 'firebase/app';
 import { initializeApp } from 'firebase/app';
 import type { Auth } from 'firebase/auth';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
-import { connectFirestoreEmulator, getFirestore, type Firestore } from 'firebase/firestore';
+import {
+	collection,
+	connectFirestoreEmulator,
+	getCountFromServer,
+	getFirestore,
+	type Firestore
+} from 'firebase/firestore';
+import { uploadClassData, uploadUserData } from './admin/upload';
 import { initAuth } from './auth';
 
-export let db: Firestore;
-export let app: FirebaseApp;
-export let auth: Auth;
+export let db: Firestore | null;
+export let app: FirebaseApp | null;
+export let auth: Auth | null;
 
 const isDev = import.meta.env.DEV;
 
@@ -40,16 +47,28 @@ export const initializeFirebase = () => {
 		throw new Error("Can't use the Firebase client on the server.");
 	}
 
-	// if (!app) {
-	app = initializeApp(firebaseConfig);
-	auth = getAuth(app);
-	db = getFirestore(app);
+	if (!app) {
+		app = initializeApp(firebaseConfig);
+		auth = getAuth(app);
+		db = getFirestore(app);
 
-	if (firebaseConfig.useEmulator) {
-		connectAuthEmulator(auth, `http://${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`);
-		connectFirestoreEmulator(db, PUBLIC_FB_LOCAL_URL, parseInt(PUBLIC_FB_FIRESTORE_PORT, 10));
+		if (firebaseConfig.useEmulator) {
+			connectAuthEmulator(auth, `http://${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`);
+			connectFirestoreEmulator(db, PUBLIC_FB_LOCAL_URL, parseInt(PUBLIC_FB_FIRESTORE_PORT, 10));
+
+			console.log('test');
+			getCountFromServer(collection(db, 'classes')).then((snapshot) => {
+				console.log('AIJDHOAI(IJYGh');
+				if (snapshot.data().count !== 0) return;
+				uploadClassData();
+			});
+
+			getCountFromServer(collection(db, 'users')).then((snapshot) => {
+				if (snapshot.data().count !== 0) return;
+				uploadUserData();
+			});
+		}
+
+		initAuth(auth);
 	}
-
-	initAuth(auth);
-	// }
 };

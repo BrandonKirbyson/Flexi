@@ -42,6 +42,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"dayjs": "^1.11.11",
 		"firebase": "^10.12.2"
 	}
 }
