@@ -16,12 +16,18 @@ import { initializeApp } from 'firebase/app';
 import type { Auth } from 'firebase/auth';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import {
+	CollectionReference,
 	collection,
 	connectFirestoreEmulator,
 	getCountFromServer,
 	getFirestore,
 	type Firestore
 } from 'firebase/firestore';
+import type { AdminData } from '../types/Admin';
+import type { StudentData } from '../types/Student';
+import type { TeacherData } from '../types/Teacher';
+import type { UserType } from '../types/UserType';
+import type { ValueOf } from '../types/Util';
 import { uploadClassData, uploadUserData } from './admin/upload';
 import { initAuth } from './auth';
 
@@ -72,3 +78,11 @@ export const initializeFirebase = () => {
 		initAuth(auth);
 	}
 };
+
+export function getUsersCollection() {
+	type Union = StudentData & TeacherData & AdminData;
+	if (!db) throw new Error('Firestore not initialized');
+	return collection(db, 'users') as CollectionReference<{
+		[_ in keyof (Union & { type: string })]: ValueOf<Union> | UserType;
+	}>;
+}
