@@ -42,6 +42,9 @@ importers:
       '@types/eslint__js':
         specifier: ^8.42.3
         version: 8.42.3
+      date-picker-svelte:
+        specifier: ^2.13.0
+        version: 2.13.0(svelte@4.2.18)
       eslint:
         specifier: ^9.5.0
         version: 9.5.0
@@ -902,6 +905,11 @@ packages:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
     hasBin: true
+
+  date-picker-svelte@2.13.0:
+    resolution: {integrity: sha512-A0MMma1uv+/sL8MwgGuEPv/UJnhR6CmWg5aR8XhYeAX/I8+RQmQh+jpwIL0Z3/g4CGo9OhNZn+VicHpvnNCCtA==}
+    peerDependencies:
+      svelte: ^3.24.0 || ^4.0.0
 
   dayjs@1.11.11:
     resolution: {integrity: sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==}
@@ -2833,6 +2841,10 @@ snapshots:
       source-map-js: 1.2.0
 
   cssesc@3.0.0: {}
+
+  date-picker-svelte@2.13.0(svelte@4.2.18):
+    dependencies:
+      svelte: 4.2.18
 
   dayjs@1.11.11: {}
 

@@ -1,4 +1,4 @@
-import { FlexDept, FlexType, type Flex } from '@/lib/types/Flex';
+import { FlexDept, FlexType, type Flex } from './Flex';
 
 // export const isStudent = (user: BaseUser): user is BaseUser & { studentData: StudentData } => {
 // 	return (user as BaseUser & { studentData: StudentData }).studentData !== undefined;

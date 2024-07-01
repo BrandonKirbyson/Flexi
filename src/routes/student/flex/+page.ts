@@ -1,5 +1,5 @@
-import { session } from '@/stores/user';
 import { redirect } from '@sveltejs/kit';
+import { session } from '../../../stores/user';
 
 export const load = () => {
 	const unsubscribe = session.subscribe((user) => {

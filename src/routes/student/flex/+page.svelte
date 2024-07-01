@@ -4,4 +4,6 @@
 	const s = session;
 </script>
 
+<!-- <DateInput bind:value={$date} /> -->
+
 <div>{JSON.stringify($s)}</div>

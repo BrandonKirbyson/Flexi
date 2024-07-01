@@ -86,3 +86,8 @@ export function getUsersCollection() {
 		[_ in keyof (Union & { type: string })]: ValueOf<Union> | UserType;
 	}>;
 }
+
+export function getScheduleCollection() {
+	if (!db) throw new Error('Firestore not initialized');
+	return collection(db, 'schedule');
+}

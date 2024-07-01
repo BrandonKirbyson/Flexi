@@ -1,6 +1,6 @@
-import { adminData, session, studentData, teacherData } from '@/stores/user';
 import { onAuthStateChanged, type Auth, type User } from 'firebase/auth';
 import { getDocs, limit, query, where } from 'firebase/firestore';
+import { adminData, session, studentData, teacherData } from '../../stores/user';
 import type { AdminData } from '../types/Admin';
 import type { StudentData, StudentUser } from '../types/Student';
 import type { TeacherData } from '../types/Teacher';

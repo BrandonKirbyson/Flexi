@@ -1,10 +1,10 @@
-import classes from '$lib/assets/schoolData/classes.json';
-import students from '$lib/assets/schoolData/users.json';
-import { FlexType, deptNameToEnum, type Flex } from '@/lib/types/Flex';
-import { formatFirebaseDate } from '@/lib/util/date';
-import { formatNameToName } from '@/lib/util/name';
 import dayjs from 'dayjs';
 import { collection, doc, writeBatch } from 'firebase/firestore';
+import classes from '../../assets/schoolData/classes.json';
+import students from '../../assets/schoolData/users.json';
+import { FlexType, deptNameToEnum, type Flex } from '../../types/Flex';
+import { formatFirebaseDate } from '../../util/date';
+import { formatNameToName } from '../../util/name';
 import { db } from '../firebase';
 
 export function uploadClassData() {
