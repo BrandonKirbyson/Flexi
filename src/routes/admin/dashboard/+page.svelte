@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DatePicker from '$lib/components/datepicker/DatePicker.svelte';
+	import DatePicker from '@/lib/components/schedule/DatePicker.svelte';
 </script>
 
 <div>

@@ -1,10 +1,12 @@
 <script lang="ts">
-	import dayjs from 'dayjs';
+	import dayjs, { type Dayjs } from 'dayjs';
 	import MdiArrowLeft from 'virtual:icons/mdi/arrow-left';
 	import MdiArrowRight from 'virtual:icons/mdi/arrow-right';
 	let currentMonth = dayjs().startOf('month');
-	let selectedDate = dayjs();
+	export let selectedDate = dayjs().startOf('day');
 	let days: dayjs.Dayjs[] = [];
+
+	export let activeDays: dayjs.Dayjs[] = [];
 
 	$: currentMonth, (days = getAllDays());
 
@@ -13,11 +15,11 @@
 	}
 
 	function getAllDays() {
-		let days = [];
-		let current = currentMonth.clone().startOf('month').startOf('week').add(1, 'day');
-		let end = currentMonth.clone().endOf('month').endOf('week').add(1, 'day');
+		let days: Dayjs[] = [];
+		let current = currentMonth.startOf('month').startOf('week').add(1, 'day');
+		let end = currentMonth.endOf('month').endOf('week').add(1, 'day');
 		while (current.isBefore(end)) {
-			days.push(current.clone());
+			days.push(current);
 			current = current.add(1, 'day');
 		}
 		return days;
@@ -49,6 +51,7 @@
 			<button
 				class="day"
 				class:active={selectedDate && selectedDate === day}
+				class:flexDay={activeDays.map((x) => x.startOf('day')).includes(day.startOf('day'))}
 				class:faded={day.month() !== currentMonth.month()}
 				on:click={() => selectDate(day)}
 			>
@@ -63,7 +66,6 @@
 		max-width: 400px;
 		background-color: var(--bg);
 		border: 1px solid var(--border);
-		margin: 1rem;
 		border-radius: 1rem;
 
 		display: flex;
@@ -127,6 +129,11 @@
 
 				&.faded {
 					color: var(--text-muted);
+				}
+
+				&.flexDay {
+					background: red;
+					color: white;
 				}
 
 				&.active {

@@ -20,6 +20,10 @@
 		.content {
 			background-color: var(--bg-secondary);
 			overflow: hidden;
+
+			display: flex;
+			flex-direction: column;
+			padding-bottom: 2rem;
 		}
 
 		div {

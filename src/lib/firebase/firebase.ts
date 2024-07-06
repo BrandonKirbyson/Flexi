@@ -59,7 +59,9 @@ export const initializeFirebase = () => {
 		db = getFirestore(app);
 
 		if (firebaseConfig.useEmulator) {
-			connectAuthEmulator(auth, `http://${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`);
+			connectAuthEmulator(auth, `http://${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`, {
+				disableWarnings: true
+			});
 			connectFirestoreEmulator(db, PUBLIC_FB_LOCAL_URL, parseInt(PUBLIC_FB_FIRESTORE_PORT, 10));
 
 			getCountFromServer(collection(db, 'classes')).then((snapshot) => {
