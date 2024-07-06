@@ -44,5 +44,15 @@ export function uploadUserData() {
 		batch.set(ref, { ...student, type: 'student' });
 	}
 
+	// for (const teacher of students.teachers) {
+	// 	const ref = doc(collection(db, 'users'));
+	// 	batch.set(ref, { ...teacher, type: 'teacher' });
+	// }
+
+	for (const teacher of students.admin) {
+		const ref = doc(collection(db, 'users'));
+		batch.set(ref, { ...teacher, type: 'admin' });
+	}
+
 	batch.commit();
 }

@@ -49,6 +49,7 @@ async function fetchCurrentUserData(user: User) {
 				...authUser,
 				...student
 			} as StudentUser);
+			session.update((s) => ({ ...s, userType }));
 			break;
 		}
 		case UserType.Teacher: {
@@ -58,6 +59,8 @@ async function fetchCurrentUserData(user: User) {
 				...authUser,
 				...teacher
 			});
+
+			session.update((s) => ({ ...s, userType }));
 			break;
 		}
 		case UserType.Admin: {
@@ -67,6 +70,7 @@ async function fetchCurrentUserData(user: User) {
 				...authUser,
 				...admin
 			});
+			session.update((s) => ({ ...s, userType }));
 		}
 	}
 }
