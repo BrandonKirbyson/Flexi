@@ -69,7 +69,3 @@ export function deptNameToEnum(deptName: string): FlexDept {
 			return FlexDept.Other;
 	}
 }
-
-export interface FlexDocument extends Omit<Flex, 'teacher'> {
-	teacher: string;
-}

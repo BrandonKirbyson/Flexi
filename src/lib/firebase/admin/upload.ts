@@ -1,19 +1,39 @@
+import { formatFirebaseDate } from '@/lib/util/date';
+import { formatNameToName } from '@/lib/util/name';
 import dayjs from 'dayjs';
-import { collection, doc, writeBatch } from 'firebase/firestore';
+import { collection, doc, setDoc, writeBatch } from 'firebase/firestore';
 import classes from '../../assets/schoolData/classes.json';
 import students from '../../assets/schoolData/users.json';
-import { FlexType, deptNameToEnum, type Flex } from '../../types/Flex';
-import { formatFirebaseDate } from '../../util/date';
-import { formatNameToName } from '../../util/name';
+import { FlexType, deptNameToEnum, type Flex, type FlexDocument } from '../../types/Flex';
 import { db } from '../firebase';
 
 export function uploadClassData() {
 	if (!db) throw new Error('Firestore not initialized');
-	const batch = writeBatch(db);
+	// const batch = writeBatch(db);
+
+	// for (const course of classes.courses) {
+	// 	const ref = doc(collection(db, 'classes'));
+	// 	const flex: Flex = {
+	// 		type: FlexType.Class,
+	// 		title: course.courseNameOriginal,
+	// 		dept: deptNameToEnum(course.departmentName),
+	// 		room: course.courseRoom,
+	// 		teacher: formatNameToName({ first: course.stafferFirstName, last: course.stafferLastName }),
+	// 		seats: course.maxNumberStudents,
+	// 		students: {
+	// 			[formatFirebaseDate(dayjs())]: []
+	// 		}
+	// 	};
+	// 	batch.set(ref, flex);
+	// }
+
+	// batch.commit();
+
+	const flexes = new Map<string, Flex>();
 
 	for (const course of classes.courses) {
-		const ref = doc(collection(db, 'classes'));
-		const flex: Flex = {
+		const uid = doc(collection(db, 'flex')).id;
+		flexes.set(uid, {
 			type: FlexType.Class,
 			title: course.courseNameOriginal,
 			dept: deptNameToEnum(course.departmentName),
@@ -23,11 +43,15 @@ export function uploadClassData() {
 			students: {
 				[formatFirebaseDate(dayjs())]: []
 			}
-		};
-		batch.set(ref, flex);
+		});
 	}
 
-	batch.commit();
+	const flex: FlexDocument = {
+		classes: Object.fromEntries(flexes)
+	};
+
+	const ref = doc(collection(db, 'flex'), 'classes');
+	setDoc(ref, flex);
 }
 
 export function uploadUserData() {

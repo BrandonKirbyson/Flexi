@@ -2,14 +2,8 @@ import type { SchoolData } from '$lib/types/SchoolData';
 import serviceAccount from '@/../private-fb-key.json';
 import type { Flex, FlexDocument } from '@/lib/types/Flex';
 import type { ServiceAccount } from 'firebase-admin';
-import admin, { initializeApp } from 'firebase-admin';
-import {
-	CollectionReference,
-	Firestore,
-	getFirestore,
-	type DocumentData
-} from 'firebase-admin/firestore';
-import { getAuth } from 'firebase/auth';
+import admin from 'firebase-admin';
+import { CollectionReference, Firestore, type DocumentData } from 'firebase-admin/firestore';
 
 const params: ServiceAccount = {
 	projectId: serviceAccount.project_id,
@@ -36,21 +30,17 @@ let app: admin.app.App | null = null;
 let firestore: Firestore | null = null;
 export const getAdminApp = () => {
 	if (!app) {
-		app = initializeApp({
-			credential: admin.credential.cert(params)
-		});
+		app = admin.app();
 	}
 	return app;
 };
 
 export const getFS = (): admin.firestore.Firestore => {
 	if (!firestore) {
-		firestore = getFirestore(getAdminApp());
+		firestore = getAdminApp().firestore();
 	}
 	return firestore;
 };
-
-export const adminAuth = getAuth();
 
 const createCollection = <T = DocumentData>(collectionName: string) => {
 	return getFS().collection(collectionName) as CollectionReference<T>;
