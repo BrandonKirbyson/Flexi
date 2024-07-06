@@ -25,6 +25,7 @@
 
 		--text: #21262c;
 		--text-secondary: #3c3c3c;
+		--text-muted: #868686;
 		--primary: #2aa744;
 		--secondary: #dcf0d7ec;
 

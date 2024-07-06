@@ -5,7 +5,6 @@ import { initializeFirebase } from '../lib/firebase/firebase';
 export function load({ url }: LoadEvent) {
 	if (browser) {
 		try {
-			console.log('start');
 			initializeFirebase();
 		} catch (ex) {
 			console.error(ex);
