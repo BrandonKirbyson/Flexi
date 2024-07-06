@@ -62,9 +62,7 @@ export const initializeFirebase = () => {
 			connectAuthEmulator(auth, `http://${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`);
 			connectFirestoreEmulator(db, PUBLIC_FB_LOCAL_URL, parseInt(PUBLIC_FB_FIRESTORE_PORT, 10));
 
-			console.log('test');
 			getCountFromServer(collection(db, 'classes')).then((snapshot) => {
-				console.log('AIJDHOAI(IJYGh');
 				if (snapshot.data().count !== 0) return;
 				uploadClassData();
 			});

@@ -23,3 +23,5 @@ vite.config.ts.timestamp-*
 
 src/lib/assets/schoolData/*
 test-results/.last-run.json
+
+private-fb-key.json

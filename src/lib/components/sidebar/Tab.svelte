@@ -20,26 +20,37 @@
 		all: unset;
 	}
 	.tab {
+		background-color: transparent;
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		padding: 1rem 0;
+		padding: 1rem 1rem;
 
+		cursor: pointer;
+
+		text-align: left;
+
+		border-radius: 0.5rem;
+
+		margin-bottom: 0.5rem;
 		color: var(--text);
+		font-weight: normal;
 
 		.icon {
-			width: 32px;
-			height: 32px;
-			margin-right: 0.5rem;
+			width: 1rem;
+			height: 1rem;
+			margin-right: 1rem;
+			margin-bottom: 0.2rem;
 		}
 
 		h1 {
 			margin: 0;
-			font-size: 1.5rem;
+			font-size: 1rem;
 		}
 
 		&.active {
 			background-color: var(--primary);
+			color: white;
 		}
 	}
 </style>

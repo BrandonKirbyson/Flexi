@@ -6,7 +6,7 @@
 </script>
 
 <div class="wrapper">
-	<span>{title}</span>
+	<span>{title.charAt(0).toUpperCase() + title.substring(1)}</span>
 
 	<div class="right-items">
 		<div class="settings">
