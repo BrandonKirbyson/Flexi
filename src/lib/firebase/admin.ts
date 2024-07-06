@@ -15,35 +15,16 @@ const isDev = import.meta.env.DEV;
 
 if (isDev) process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
 
-// let db: database.Database | null = null;
-// export const getAdminApp = (): database.Database => {
-// 	if (!db) {
-// 		admin.initializeApp({
-// 			credential: admin.credential.cert(params)
-// 		});
-// 		db = admin.database();
-// 	}
-// 	return db;
-// };
-
-let app: admin.app.App | null = null;
-let firestore: Firestore | null = null;
-export const getAdminApp = () => {
-	if (!app) {
-		app = admin.app();
-	}
-	return app;
-};
-
-export const getFS = (): admin.firestore.Firestore => {
-	if (!firestore) {
-		firestore = getAdminApp().firestore();
-	}
-	return firestore;
-};
+const app: admin.app.App =
+	admin.apps.length === 0
+		? admin.initializeApp({
+				credential: admin.credential.cert(params)
+			})
+		: admin.app();
+const firestore: Firestore = app.firestore();
 
 const createCollection = <T = DocumentData>(collectionName: string) => {
-	return getFS().collection(collectionName) as CollectionReference<T>;
+	return firestore.collection(collectionName) as CollectionReference<T>;
 };
 
 export const flexAdminCollection = createCollection<FlexDocument>('flex');

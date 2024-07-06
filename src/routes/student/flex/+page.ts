@@ -1,14 +1,16 @@
-import { redirect } from '@sveltejs/kit';
+import { goto } from '$app/navigation';
+import type { Flex } from '@/lib/types/Flex';
+import type { LoadEvent } from '@sveltejs/kit';
 import { session } from '../../../stores/user';
 
-export const load = () => {
-	const unsubscribe = session.subscribe((user) => {
+export const load = async ({ fetch }: LoadEvent) => {
+	session.subscribe((user) => {
 		if (!user.loading && !user.uid) {
-			redirect(302, '/login');
+			goto('/login');
 		}
 	});
 
-	unsubscribe();
+	const classes = (await (await fetch('/api/flex')).json()) as Record<string, Flex>;
 
-	return {};
+	return { classes };
 };

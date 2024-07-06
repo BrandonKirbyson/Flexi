@@ -9,31 +9,12 @@ import { db } from '../firebase';
 
 export function uploadClassData() {
 	if (!db) throw new Error('Firestore not initialized');
-	// const batch = writeBatch(db);
 
-	// for (const course of classes.courses) {
-	// 	const ref = doc(collection(db, 'classes'));
-	// 	const flex: Flex = {
-	// 		type: FlexType.Class,
-	// 		title: course.courseNameOriginal,
-	// 		dept: deptNameToEnum(course.departmentName),
-	// 		room: course.courseRoom,
-	// 		teacher: formatNameToName({ first: course.stafferFirstName, last: course.stafferLastName }),
-	// 		seats: course.maxNumberStudents,
-	// 		students: {
-	// 			[formatFirebaseDate(dayjs())]: []
-	// 		}
-	// 	};
-	// 	batch.set(ref, flex);
-	// }
-
-	// batch.commit();
-
-	const flexes = new Map<string, Flex>();
+	const flexes: Record<string, Flex> = {};
 
 	for (const course of classes.courses) {
 		const uid = doc(collection(db, 'flex')).id;
-		flexes.set(uid, {
+		flexes[uid] = {
 			type: FlexType.Class,
 			title: course.courseNameOriginal,
 			dept: deptNameToEnum(course.departmentName),
@@ -43,11 +24,11 @@ export function uploadClassData() {
 			students: {
 				[formatFirebaseDate(dayjs())]: []
 			}
-		});
+		};
 	}
 
 	const flex: FlexDocument = {
-		classes: Object.fromEntries(flexes)
+		classes: flexes
 	};
 
 	const ref = doc(collection(db, 'flex'), 'classes');
