@@ -1,20 +1,27 @@
 import { scheduleAdminCollection } from '@/lib/firebase/admin';
 import type { FlexScheduleDocument } from '@/lib/types/FlexSchedule';
+import { HttpStatusCode } from '@/lib/types/HttpStatus';
 import { DAY_FORMAT } from '@/lib/util/date';
+import { ENDPOINTS, apiPost } from '@/lib/util/endpoints';
 import type { RequestEvent } from '@sveltejs/kit';
 import dayjs from 'dayjs';
 
 export async function POST(event: RequestEvent) {
-	const body = (await event.request.json()) as { date: string };
-	if (!body.date) return new Response(null, { status: 400 });
+	return await apiPost<typeof ENDPOINTS.POST.Flex.AddSchedule>(event, async (params) => {
+		const date = dayjs(params.date);
 
-	const date = dayjs(body.date);
+		const doc: FlexScheduleDocument = {
+			date: date.format(DAY_FORMAT),
+			classes: {}
+		};
 
-	const schedule: FlexScheduleDocument = {
-		date: date.format(DAY_FORMAT),
-		classes: {}
-	};
+		await scheduleAdminCollection.add(doc);
 
-	await scheduleAdminCollection.add(schedule);
-	return new Response(null, { status: 200 });
+		const schedule = {
+			classes: doc.classes,
+			date: date
+		};
+
+		return [schedule, HttpStatusCode.SUCCESS_CREATED];
+	});
 }

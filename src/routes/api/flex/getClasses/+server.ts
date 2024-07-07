@@ -1,18 +1,17 @@
 import { flexAdminCollection } from '@/lib/firebase/admin';
+import { HttpStatusCode } from '@/lib/types/HttpStatus';
+import { ENDPOINTS, apiFetch } from '@/lib/util/endpoints';
+import type { RequestEvent } from '../$types';
 
-export async function GET(): Promise<Response> {
-	const doc = await flexAdminCollection.doc('classes').get();
-	if (!doc.exists) throw new Error('Document not found');
+export async function GET(event: RequestEvent): Promise<Response> {
+	return await apiFetch<typeof ENDPOINTS.GET.Flex.GetClasses>(event, async () => {
+		const doc = await flexAdminCollection.doc('classes').get();
+		if (!doc.exists) throw new Error('Document not found');
 
-	const data = doc.data();
-	if (typeof data === 'undefined') return new Response(null, { status: 404 });
-	const classes = data.classes;
+		const data = doc.data();
+		if (typeof data === 'undefined') return [{}, HttpStatusCode.NOT_FOUND];
+		const classes = data.classes;
 
-	return new Response(JSON.stringify(classes), {
-		status: 200,
-		headers: {
-			'content-type': 'application/json'
-			// 'cache-control': 'public, max-age=3600'
-		}
+		return [classes, HttpStatusCode.SUCCESS];
 	});
 }

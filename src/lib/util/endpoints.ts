@@ -50,7 +50,7 @@ type PostEndpointMap = Implements<
 			};
 		};
 		[ENDPOINTS.POST.Flex.DeleteSchedule]: {
-			return: undefined;
+			return: null;
 			params: {
 				date: string;
 			};
@@ -95,13 +95,26 @@ export async function fetchEndpoint<T extends FlattenedEndpoints<'GET'>>(
 
 export async function postEndpoint<T extends FlattenedEndpoints<'POST'>>(
 	endpoint: T,
-	data: PostEndpointMap[T]['params']
+	params: PostEndpointMap[T]['params']
 ): Promise<PostEndpointMap[T]['return']> {
-	const res = await fetch(endpoint, { method: 'POST', body: JSON.stringify(data) });
+	const res = await fetch(endpoint, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(params)
+	});
 	if (!res.status.toString(10).startsWith('2')) {
 		throw new Error(res.status.toString());
 	}
-	return (await res.json()) as Promise<PostEndpointMap[T]['return']>;
+
+	const data = await res.text();
+	if (data.length === 0) return null;
+	else {
+		try {
+			return (await JSON.parse(data)) as PostEndpointMap[T]['return'];
+		} catch (err) {
+			throw new Error(`Failed to parse JSON from post to ${endpoint}. Error: ${err as string}`);
+		}
+	}
 }
 
 export enum CacheType {
@@ -124,11 +137,27 @@ export async function apiFetch<T extends FlattenedEndpoints<'GET'>>(
 		...Object.fromEntries(urlSearch.entries())
 	} as FetchEndpointMap[T]['params'];
 	const [data, status] = await fn(params);
-	return new Response(JSON.stringify(data), {
+	const res = data == null ? null : JSON.stringify(data);
+	return new Response(res, {
 		status: status,
 		headers: {
 			'content-type': 'application/json',
 			'cache-control': `public, max-age=${cache}`
+		}
+	});
+}
+
+export async function apiPost<T extends FlattenedEndpoints<'POST'>>(
+	event: RequestEvent,
+	fn: (params: PostEndpointMap[T]['params']) => Promise<[PostEndpointMap[T]['return'], number]>
+): Promise<Response> {
+	const params = (await event.request.json()) as PostEndpointMap[T]['params'];
+	const [data, status] = await fn(params);
+	const res = data == null ? null : JSON.stringify(data);
+	return new Response(res, {
+		status: status,
+		headers: {
+			'content-type': 'application/json'
 		}
 	});
 }

@@ -19,10 +19,8 @@
 	});
 
 	function fetchSchedule() {
-		console.log('fetching', selectedDate.format('YYYY-MM-DD'));
 		fetchEndpoint(ENDPOINTS.GET.Flex.GetSchedule, { date: selectedDate.format('YYYY-MM-DD') }).then(
 			(data) => {
-				console.log('d', data);
 				schedule = data;
 			}
 		);
@@ -36,11 +34,15 @@
 		});
 	}
 
-	function editFlex() {}
-
 	function transferFlex(toDate: Dayjs): void {}
 
-	function deleteFlex() {}
+	function deleteFlex() {
+		postEndpoint(ENDPOINTS.POST.Flex.DeleteSchedule, {
+			date: selectedDate.format('YYYY-MM-DD')
+		}).then(() => {
+			schedule = null;
+		});
+	}
 </script>
 
 <div class="wrapper">
