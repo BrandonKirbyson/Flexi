@@ -1,7 +1,8 @@
 import { scheduleAdminCollection } from '@/lib/firebase/admin';
 import { HttpStatusCode } from '@/lib/types/HttpStatus';
+import { apiFetch } from '@/lib/util/api';
 import { DAY_FORMAT } from '@/lib/util/date';
-import { ENDPOINTS, apiFetch } from '@/lib/util/endpoints';
+import { ENDPOINTS } from '@/lib/util/endpoints';
 import dayjs from 'dayjs';
 import type { RequestEvent } from './$types';
 

@@ -43,8 +43,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@types/jsonwebtoken": "^9.0.6",
 		"dayjs": "^1.11.11",
 		"firebase": "^10.12.2",
-		"firebase-admin": "^12.2.0"
+		"firebase-admin": "^12.2.0",
+		"jsonwebtoken": "^9.0.2"
 	}
 }

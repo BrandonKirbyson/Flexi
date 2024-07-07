@@ -1,25 +1,18 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { auth } from '$lib/firebase/firebase';
 	import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 	import { session } from '../../stores/user';
 
 	async function loginWithGoogle() {
 		const provider = new GoogleAuthProvider();
+		if (!auth) return;
 		await signInWithPopup(auth, provider)
 			.then((result) => {
-				const { displayName, email, photoURL, uid } = result?.user;
+				const { uid } = result?.user;
 				session.set({
-					loggedIn: true,
-					user: {
-						displayName,
-						email,
-						photoURL,
-						uid
-					}
+					uid,
+					loading: false
 				});
-
-				goto('/');
 			})
 			.catch((error) => {
 				return error;

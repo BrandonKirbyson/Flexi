@@ -1,6 +1,7 @@
 import { flexAdminCollection } from '@/lib/firebase/admin';
 import { HttpStatusCode } from '@/lib/types/HttpStatus';
-import { ENDPOINTS, apiFetch } from '@/lib/util/endpoints';
+import { apiFetch } from '@/lib/util/api';
+import { ENDPOINTS } from '@/lib/util/endpoints';
 import type { RequestEvent } from '../$types';
 
 export async function GET(event: RequestEvent): Promise<Response> {

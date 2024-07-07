@@ -1,9 +1,8 @@
-import type { RequestEvent } from '@sveltejs/kit';
+import { getIdToken } from 'firebase/auth';
 import type { UnionToIntersection } from 'firebase/firestore';
 import { auth } from '../firebase/firebase';
 import type { Flex } from '../types/Flex';
 import type { FlexSchedule } from '../types/FlexSchedule';
-import { HttpStatusCode } from '../types/HttpStatus';
 import type { Implements } from '../types/Util';
 
 export const ENDPOINTS = {
@@ -26,7 +25,7 @@ export interface EmptyObject {
 	[emptySymbol]?: never;
 }
 
-type FetchEndpointMap = Implements<
+export type FetchEndpointMap = Implements<
 	EndpointMapType<'GET'>,
 	{
 		[ENDPOINTS.GET.Flex.GetSchedule]: {
@@ -42,7 +41,7 @@ type FetchEndpointMap = Implements<
 	}
 >;
 
-type PostEndpointMap = Implements<
+export type PostEndpointMap = Implements<
 	EndpointMapType<'POST'>,
 	{
 		[ENDPOINTS.POST.Flex.AddSchedule]: {
@@ -60,7 +59,7 @@ type PostEndpointMap = Implements<
 	}
 >;
 
-type EndpointMapType<T extends keyof typeof ENDPOINTS> = {
+export type EndpointMapType<T extends keyof typeof ENDPOINTS> = {
 	[key in FlattenedEndpoints<T> as string]: {
 		return: unknown;
 		params: T extends 'GET' ? Record<string, string> | EmptyObject : Record<string, string>;
@@ -69,7 +68,7 @@ type EndpointMapType<T extends keyof typeof ENDPOINTS> = {
 
 type Keys<T extends keyof typeof ENDPOINTS> = (typeof ENDPOINTS)[T][keyof (typeof ENDPOINTS)[T]];
 
-type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = UnionToIntersection<
+export type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = UnionToIntersection<
 	Keys<T>
 >[keyof UnionToIntersection<Keys<T>>];
 
@@ -81,7 +80,7 @@ export async function fetchEndpoint<T extends FlattenedEndpoints<'GET'>>(
 	if (!user) {
 		throw new Error('User is not authenticated');
 	}
-	const token = await user.getIdToken();
+	const token = await getIdToken(user);
 	const res = await fetch(
 		`${endpoint}?${new URLSearchParams(params as Record<string, string>).toString()}`,
 		{
@@ -128,65 +127,4 @@ export async function postEndpoint<T extends FlattenedEndpoints<'POST'>>(
 			throw new Error(`Failed to parse JSON from post to ${endpoint}. Error: ${err as string}`);
 		}
 	}
-}
-
-export enum CacheType {
-	NONE = '0',
-	MINUTE = '60',
-	FIVE_MINUTES = '300',
-	HOUR = '3600',
-	DAY = '86400',
-	MONTH = '2592000',
-	YEAR = '31536000'
-}
-
-async function verifyAuth(event: RequestEvent): Promise<boolean> {
-	const authHeader = event.request.headers.get('Authorization');
-	if (!authHeader) return false;
-	const token = authHeader.split(' ')[1];
-	console.log('VERIFYING', token);
-	await Promise.resolve();
-	// const decodedToken = await adminAuth.verifyIdToken(token);
-	// if (decodedToken.uid) return true;
-	return false;
-}
-
-export async function apiFetch<T extends FlattenedEndpoints<'GET'>>(
-	event: RequestEvent,
-	fn: (params: FetchEndpointMap[T]['params']) => Promise<[FetchEndpointMap[T]['return'], number]>,
-	cache: CacheType = CacheType.NONE
-): Promise<Response> {
-	const auth = await verifyAuth(event);
-	console.log('AUTH', auth);
-	if (!auth) return new Response(null, { status: HttpStatusCode.UNAUTHORIZED });
-
-	const urlSearch = new URLSearchParams(event.request.url.split('?')[1]);
-	const params = {
-		...Object.fromEntries(urlSearch.entries())
-	} as FetchEndpointMap[T]['params'];
-	const [data, status] = await fn(params);
-
-	const res = data == null ? null : JSON.stringify(data);
-	return new Response(res, {
-		status: status,
-		headers: {
-			'content-type': 'application/json',
-			'cache-control': `public, max-age=${cache}`
-		}
-	});
-}
-
-export async function apiPost<T extends FlattenedEndpoints<'POST'>>(
-	event: RequestEvent,
-	fn: (params: PostEndpointMap[T]['params']) => Promise<[PostEndpointMap[T]['return'], number]>
-): Promise<Response> {
-	const params = (await event.request.json()) as PostEndpointMap[T]['params'];
-	const [data, status] = await fn(params);
-	const res = data == null ? null : JSON.stringify(data);
-	return new Response(res, {
-		status: status,
-		headers: {
-			'content-type': 'application/json'
-		}
-	});
 }
