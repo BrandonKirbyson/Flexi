@@ -1,32 +1,37 @@
 <script lang="ts">
 	import type { FlexSchedule } from '@/lib/types/FlexSchedule';
+	import { ENDPOINTS, fetchEndpoint, postEndpoint } from '@/lib/util/endpoints';
 	import dayjs, { type Dayjs } from 'dayjs';
-	import { afterUpdate } from 'svelte';
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	export let selectedDate: Dayjs;
 
 	let schedule: FlexSchedule | null = null;
 
-	afterUpdate(() => {
-		fetchSchedule(selectedDate);
+	const date = writable(selectedDate);
+	$: date.set(selectedDate);
+
+	onMount(() => {
+		date.subscribe((value) => {
+			fetchSchedule(value);
+		});
 	});
 
 	function fetchSchedule(date: Dayjs) {
-		fetch(`/api/flex/getSchedule?date=${date.format('YYYY-MM-DD')}`)
-			.then((res) => res.json())
-			.then((data) => {
+		fetchEndpoint(ENDPOINTS.GET.Flex.GetSchedule, { date: date.format('YYYY-MM-DD') }).then(
+			(data) => {
 				schedule = data;
-				console.log('fetched', schedule);
-			});
+			}
+		);
 	}
 
 	function addSchedule() {
-		fetch(`/api/flex/addFlex?date=${selectedDate.format('YYYY-MM-DD')}`, {
-			method: 'POST'
-		}).then(() => {
-			fetchSchedule(selectedDate);
-			console.log('added flex');
-		});
+		postEndpoint(ENDPOINTS.POST.Flex.AddSchedule, { date: selectedDate.format('YYYY-MM-DD') }).then(
+			(data) => {
+				schedule = data;
+			}
+		);
 	}
 
 	function editFlex() {}

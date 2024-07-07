@@ -1,17 +1,20 @@
 import { scheduleAdminCollection } from '@/lib/firebase/admin';
-import type { FlexSchedule } from '@/lib/types/FlexSchedule';
+import type { FlexScheduleDocument } from '@/lib/types/FlexSchedule';
 import type { RequestEvent } from '@sveltejs/kit';
 import dayjs from 'dayjs';
+import { Timestamp } from 'firebase/firestore';
 
-export async function POST({ url }: RequestEvent) {
-	if (!url.searchParams.get('date')) return new Response(null, { status: 400 });
-	const date = dayjs(url.searchParams.get('date'));
+export async function POST(event: RequestEvent) {
+	const body = (await event.request.json()) as { date: string };
+	if (!body.date) return new Response(null, { status: 400 });
 
-	const schedule: FlexSchedule = {
-		date: dayjs(date),
+	const date = dayjs(body.date);
+
+	const schedule: FlexScheduleDocument = {
+		date: Timestamp.fromDate(date.toDate()),
 		classes: {}
 	};
 
 	await scheduleAdminCollection.add(schedule);
-	console.log('Schedule added');
+	return new Response(null, { status: 200 });
 }
