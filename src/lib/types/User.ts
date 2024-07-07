@@ -1,5 +1,4 @@
 import type { UserType } from './UserType';
-import type { Name } from './Util';
 
 export interface AuthUser {
 	uid: string;
@@ -9,6 +8,11 @@ export interface AuthUser {
 export interface BaseUser {
 	email: string;
 	name: Name;
+}
+
+export interface Name {
+	first: string;
+	last: string;
 }
 
 export interface SessionState {

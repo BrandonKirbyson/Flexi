@@ -9,29 +9,31 @@
 
 	let schedule: FlexSchedule | null = null;
 
-	const date = writable(selectedDate);
-	$: date.set(selectedDate);
+	const dateStore = writable(selectedDate);
+	$: dateStore.set(selectedDate);
 
 	onMount(() => {
-		date.subscribe((value) => {
-			fetchSchedule(value);
+		dateStore.subscribe(() => {
+			fetchSchedule();
 		});
 	});
 
-	function fetchSchedule(date: Dayjs) {
-		fetchEndpoint(ENDPOINTS.GET.Flex.GetSchedule, { date: date.format('YYYY-MM-DD') }).then(
+	function fetchSchedule() {
+		console.log('fetching', selectedDate.format('YYYY-MM-DD'));
+		fetchEndpoint(ENDPOINTS.GET.Flex.GetSchedule, { date: selectedDate.format('YYYY-MM-DD') }).then(
 			(data) => {
+				console.log('d', data);
 				schedule = data;
 			}
 		);
 	}
 
 	function addSchedule() {
-		postEndpoint(ENDPOINTS.POST.Flex.AddSchedule, { date: selectedDate.format('YYYY-MM-DD') }).then(
-			(data) => {
-				schedule = data;
-			}
-		);
+		postEndpoint(ENDPOINTS.POST.Flex.AddSchedule, {
+			date: selectedDate.format('YYYY-MM-DD')
+		}).then((data) => {
+			schedule = data;
+		});
 	}
 
 	function editFlex() {}
@@ -42,11 +44,6 @@
 </script>
 
 <div class="wrapper">
-	<!-- {#await () => getClasses(selectedDate)}
-		LOADING
-	{:then schedule}
-		{JSON.stringify(schedule)}
-	{/await} -->
 	<h1>{selectedDate.format('MMMM D, YYYY')}</h1>
 
 	{#if schedule}

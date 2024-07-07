@@ -1,5 +1,1 @@
-import type { Dayjs } from 'dayjs';
-
-export function formatFirebaseDate(day: Dayjs): string {
-	return day.format('YYYY-MM-DD');
-}
+export const DAY_FORMAT = 'YYYY-MM-DD';

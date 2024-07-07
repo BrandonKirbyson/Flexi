@@ -1,27 +1,23 @@
 import { scheduleAdminCollection } from '@/lib/firebase/admin';
+import { HttpStatusCode } from '@/lib/types/HttpStatus';
+import { DAY_FORMAT } from '@/lib/util/date';
+import { ENDPOINTS, apiFetch } from '@/lib/util/endpoints';
 import dayjs from 'dayjs';
 import type { RequestEvent } from './$types';
 
 export async function GET(event: RequestEvent): Promise<Response> {
-	const date = dayjs(event.url.searchParams.get('date')).toDate();
-	const snapshot = await scheduleAdminCollection.where('date', '==', date).limit(1).get();
-	if (snapshot.docs.length === 0) return new Response(null, { status: 204 });
+	return await apiFetch<typeof ENDPOINTS.GET.Flex.GetSchedule>(event, async (params) => {
+		const date = dayjs(params.date).format(DAY_FORMAT);
+		const snapshot = await scheduleAdminCollection.where('date', '==', date).limit(1).get();
 
-	if (typeof snapshot.docs[0].data() === 'undefined') return new Response(null, { status: 204 });
-	const data = snapshot.docs[0].data();
-	const schedule = {
-		classes: data.classes,
-		date: dayjs(data.date.toDate())
-	};
+		if (snapshot.docs.length === 0) return [null, HttpStatusCode.SUCCESS_NO_CONTENT];
 
-	// event.setHeaders({
-	// 	'cache-control': 'public, max-age=60'
-	// });
+		const data = snapshot.docs[0].data();
+		const schedule = {
+			classes: data.classes,
+			date: dayjs(data.date)
+		};
 
-	return new Response(JSON.stringify(schedule), {
-		status: 200,
-		headers: {
-			'content-type': 'application/json'
-		}
+		return [schedule, HttpStatusCode.SUCCESS];
 	});
 }

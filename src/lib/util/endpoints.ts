@@ -1,3 +1,4 @@
+import type { RequestEvent } from '@sveltejs/kit';
 import type { UnionToIntersection } from 'firebase/firestore';
 import type { Flex } from '../types/Flex';
 import type { FlexSchedule } from '../types/FlexSchedule';
@@ -18,13 +19,6 @@ export const ENDPOINTS = {
 	}
 } as const;
 
-// type EmptyOnly<T> = T extends infer R
-// ? R extends { [K in keyof R]: never }
-// ? true
-// : never;
-
-// let valid: EmptyOnly<{}>; // This is valid
-// valid = {}; // This is also valid
 const emptySymbol = Symbol('EmptyObject type');
 export interface EmptyObject {
 	[emptySymbol]?: never;
@@ -79,7 +73,7 @@ type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = UnionToIntersection<
 
 export async function fetchEndpoint<T extends FlattenedEndpoints<'GET'>>(
 	endpoint: T,
-	params: FetchEndpointMap[T]['params']
+	params: FetchEndpointMap[T]['params'] = {}
 ): Promise<FetchEndpointMap[T]['return']> {
 	const res = await fetch(
 		`${endpoint}?${new URLSearchParams(params as Record<string, string>).toString()}`
@@ -108,4 +102,33 @@ export async function postEndpoint<T extends FlattenedEndpoints<'POST'>>(
 		throw new Error(res.status.toString());
 	}
 	return (await res.json()) as Promise<PostEndpointMap[T]['return']>;
+}
+
+export enum CacheType {
+	NONE = '0',
+	MINUTE = '60',
+	FIVE_MINUTES = '300',
+	HOUR = '3600',
+	DAY = '86400',
+	MONTH = '2592000',
+	YEAR = '31536000'
+}
+
+export async function apiFetch<T extends FlattenedEndpoints<'GET'>>(
+	event: RequestEvent,
+	fn: (params: FetchEndpointMap[T]['params']) => Promise<[FetchEndpointMap[T]['return'], number]>,
+	cache: CacheType = CacheType.NONE
+): Promise<Response> {
+	const urlSearch = new URLSearchParams(event.request.url.split('?')[1]);
+	const params = {
+		...Object.fromEntries(urlSearch.entries())
+	} as FetchEndpointMap[T]['params'];
+	const [data, status] = await fn(params);
+	return new Response(JSON.stringify(data), {
+		status: status,
+		headers: {
+			'content-type': 'application/json',
+			'cache-control': `public, max-age=${cache}`
+		}
+	});
 }

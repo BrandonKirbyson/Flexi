@@ -1,4 +1,4 @@
-import { formatFirebaseDate } from '@/lib/util/date';
+import { DAY_FORMAT } from '@/lib/util/date';
 import { formatNameToName } from '@/lib/util/name';
 import dayjs from 'dayjs';
 import { collection, doc, setDoc, writeBatch } from 'firebase/firestore';
@@ -22,7 +22,7 @@ export function uploadClassData() {
 			teacher: formatNameToName({ first: course.stafferFirstName, last: course.stafferLastName }),
 			seats: course.maxNumberStudents,
 			students: {
-				[formatFirebaseDate(dayjs())]: []
+				[dayjs().format(DAY_FORMAT)]: []
 			}
 		};
 	}

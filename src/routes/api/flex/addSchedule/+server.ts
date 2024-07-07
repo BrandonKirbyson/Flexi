@@ -1,8 +1,8 @@
 import { scheduleAdminCollection } from '@/lib/firebase/admin';
 import type { FlexScheduleDocument } from '@/lib/types/FlexSchedule';
+import { DAY_FORMAT } from '@/lib/util/date';
 import type { RequestEvent } from '@sveltejs/kit';
 import dayjs from 'dayjs';
-import { Timestamp } from 'firebase/firestore';
 
 export async function POST(event: RequestEvent) {
 	const body = (await event.request.json()) as { date: string };
@@ -11,7 +11,7 @@ export async function POST(event: RequestEvent) {
 	const date = dayjs(body.date);
 
 	const schedule: FlexScheduleDocument = {
-		date: Timestamp.fromDate(date.toDate()),
+		date: date.format(DAY_FORMAT),
 		classes: {}
 	};
 
