@@ -10,7 +10,7 @@ export const load = async ({ fetch }: LoadEvent) => {
 		}
 	});
 
-	const classes = (await (await fetch('/api/flex')).json()) as Record<string, Flex>;
+	const classes = (await (await fetch('/api/flex/getClasses')).json()) as Record<string, Flex>;
 
 	return { classes };
 };

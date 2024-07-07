@@ -4,6 +4,7 @@ import type { Flex, FlexDocument } from '@/lib/types/Flex';
 import type { ServiceAccount } from 'firebase-admin';
 import admin from 'firebase-admin';
 import { CollectionReference, Firestore, type DocumentData } from 'firebase-admin/firestore';
+import type { FlexSchedule } from '../types/FlexSchedule';
 
 const params: ServiceAccount = {
 	projectId: serviceAccount.project_id,
@@ -28,5 +29,6 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 };
 
 export const flexAdminCollection = createCollection<FlexDocument>('flex');
+export const scheduleAdminCollection = createCollection<FlexSchedule>('schedule');
 export const teachersColAdmin = createCollection<Flex>('teachers');
 export const schoolDataColAdmin = createCollection<SchoolData>('school');

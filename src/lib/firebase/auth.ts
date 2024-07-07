@@ -30,7 +30,9 @@ async function fetchCurrentUserData(user: User) {
 	if (!user.email) throw new Error('User email not found');
 
 	const q = query(getUsersCollection(), where('email', '==', user.email), limit(1));
-	const docRef = (await getDocs(q)).docs[0];
+	const docs = await getDocs(q);
+	if (docs.empty) throw new Error('User not found');
+	const docRef = docs.docs[0];
 	if (!docRef.exists()) throw new Error('User not found');
 
 	const userType = docRef.data().type as UserType;
