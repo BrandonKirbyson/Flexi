@@ -1,5 +1,5 @@
+import { CLIENT_EMAIL, PRIVATE_KEY, PROJECT_ID } from '$env/static/private';
 import type { SchoolData } from '$lib/types/SchoolData';
-import serviceAccount from '@/../private-fb-key.json';
 import type { Flex, FlexDocument } from '@/lib/types/Flex';
 import type { ServiceAccount } from 'firebase-admin';
 import admin from 'firebase-admin';
@@ -7,9 +7,9 @@ import { CollectionReference, Firestore, type DocumentData } from 'firebase-admi
 import type { FlexScheduleDocument } from '../types/FlexSchedule';
 
 const params: ServiceAccount = {
-	projectId: serviceAccount.project_id,
-	privateKey: serviceAccount.private_key,
-	clientEmail: serviceAccount.client_email
+	projectId: PROJECT_ID as string,
+	privateKey: PRIVATE_KEY as string,
+	clientEmail: CLIENT_EMAIL as string
 };
 
 const isDev = import.meta.env.DEV;
@@ -23,6 +23,7 @@ const app: admin.app.App =
 			})
 		: admin.app();
 const firestore: Firestore = app.firestore();
+export const adminAuth: admin.auth.Auth = app.auth();
 
 const createCollection = <T = DocumentData>(collectionName: string) => {
 	return firestore.collection(collectionName) as CollectionReference<T>;

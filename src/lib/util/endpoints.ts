@@ -1,7 +1,9 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import type { UnionToIntersection } from 'firebase/firestore';
+import { auth } from '../firebase/firebase';
 import type { Flex } from '../types/Flex';
 import type { FlexSchedule } from '../types/FlexSchedule';
+import { HttpStatusCode } from '../types/HttpStatus';
 import type { Implements } from '../types/Util';
 
 export const ENDPOINTS = {
@@ -75,8 +77,19 @@ export async function fetchEndpoint<T extends FlattenedEndpoints<'GET'>>(
 	endpoint: T,
 	params: FetchEndpointMap[T]['params'] = {}
 ): Promise<FetchEndpointMap[T]['return']> {
+	const user = auth?.currentUser;
+	if (!user) {
+		throw new Error('User is not authenticated');
+	}
+	const token = await user.getIdToken();
 	const res = await fetch(
-		`${endpoint}?${new URLSearchParams(params as Record<string, string>).toString()}`
+		`${endpoint}?${new URLSearchParams(params as Record<string, string>).toString()}`,
+		{
+			method: 'GET',
+			headers: new Headers({
+				Authorization: `Bearer ${token}`
+			})
+		}
 	);
 	if (!res.status.toString(10).startsWith('2')) {
 		throw new Error(res.status.toString());
@@ -127,16 +140,32 @@ export enum CacheType {
 	YEAR = '31536000'
 }
 
+async function verifyAuth(event: RequestEvent): Promise<boolean> {
+	const authHeader = event.request.headers.get('Authorization');
+	if (!authHeader) return false;
+	const token = authHeader.split(' ')[1];
+	console.log('VERIFYING', token);
+	await Promise.resolve();
+	// const decodedToken = await adminAuth.verifyIdToken(token);
+	// if (decodedToken.uid) return true;
+	return false;
+}
+
 export async function apiFetch<T extends FlattenedEndpoints<'GET'>>(
 	event: RequestEvent,
 	fn: (params: FetchEndpointMap[T]['params']) => Promise<[FetchEndpointMap[T]['return'], number]>,
 	cache: CacheType = CacheType.NONE
 ): Promise<Response> {
+	const auth = await verifyAuth(event);
+	console.log('AUTH', auth);
+	if (!auth) return new Response(null, { status: HttpStatusCode.UNAUTHORIZED });
+
 	const urlSearch = new URLSearchParams(event.request.url.split('?')[1]);
 	const params = {
 		...Object.fromEntries(urlSearch.entries())
 	} as FetchEndpointMap[T]['params'];
 	const [data, status] = await fn(params);
+
 	const res = data == null ? null : JSON.stringify(data);
 	return new Response(res, {
 		status: status,
