@@ -1,4 +1,4 @@
-import type { Name } from './Util';
+import type { Name } from './User';
 
 export interface FlexDocument {
 	classes: Record<string, Flex>;

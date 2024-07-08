@@ -1,16 +1,14 @@
 <script lang="ts">
 	import type { FlexSchedule } from '@/lib/types/FlexSchedule';
 	import { ENDPOINTS, fetchEndpoint, postEndpoint } from '@/lib/util/endpoints';
+	import { dateStore } from '@/stores/date';
 	import dayjs, { type Dayjs } from 'dayjs';
 	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
-
-	export let selectedDate: Dayjs;
 
 	let schedule: FlexSchedule | null = null;
 
-	const dateStore = writable(selectedDate);
-	$: dateStore.set(selectedDate);
+	// const dateStore = writable(selectedDate);
+	// $: dateStore.set(selectedDate);
 
 	onMount(() => {
 		dateStore.subscribe(() => {
@@ -19,7 +17,7 @@
 	});
 
 	function fetchSchedule() {
-		fetchEndpoint(ENDPOINTS.GET.Flex.GetSchedule, { date: selectedDate.format('YYYY-MM-DD') }).then(
+		fetchEndpoint(ENDPOINTS.GET.Flex.GetSchedule, { date: $dateStore.format('YYYY-MM-DD') }).then(
 			(data) => {
 				schedule = data;
 			}
@@ -28,7 +26,7 @@
 
 	function addSchedule() {
 		postEndpoint(ENDPOINTS.POST.Flex.AddSchedule, {
-			date: selectedDate.format('YYYY-MM-DD')
+			date: $dateStore.format('YYYY-MM-DD')
 		}).then((data) => {
 			schedule = data;
 		});
@@ -38,7 +36,7 @@
 
 	function deleteFlex() {
 		postEndpoint(ENDPOINTS.POST.Flex.DeleteSchedule, {
-			date: selectedDate.format('YYYY-MM-DD')
+			date: $dateStore.format('YYYY-MM-DD')
 		}).then(() => {
 			schedule = null;
 		});
@@ -46,7 +44,7 @@
 </script>
 
 <div class="wrapper">
-	<h1>{selectedDate.format('MMMM D, YYYY')}</h1>
+	<h1>{$dateStore.format('MMMM DD, YYYY')}</h1>
 
 	{#if schedule}
 		<h1>Flex on this Day!</h1>

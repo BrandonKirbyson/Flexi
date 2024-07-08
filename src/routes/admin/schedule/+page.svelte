@@ -1,16 +1,13 @@
-<script>
-	import DatePicker from '@/lib/components/schedule/DatePicker.svelte';
+<script lang="ts">
 	import EditFlexDay from '@/lib/components/schedule/EditFlexDay.svelte';
-	import dayjs from 'dayjs';
-
-	let selectedDate = dayjs().startOf('day');
+	import DatePicker from '@/lib/components/schedule/FlexCalendar.svelte';
 </script>
 
 <div class="split-screen">
-	<EditFlexDay {selectedDate} />
+	<EditFlexDay />
 
 	<div class="right-sidebar">
-		<DatePicker bind:selectedDate />
+		<DatePicker />
 	</div>
 </div>
 

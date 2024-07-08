@@ -3,23 +3,23 @@ import dayjs from 'dayjs';
 import { writable } from 'svelte/store';
 
 function createDate() {
-	const { subscribe, set, update } = writable<Dayjs>();
+	const { subscribe, set, update } = writable<Dayjs>(dayjs());
 
 	return {
 		subscribe,
-		selectDay: (day: Dayjs) => {
+		selectDay(day: Dayjs) {
 			update(() => day.startOf('day'));
 		},
-		incrementDay: () => {
+		incrementDay() {
 			update((day) => day.add(1, 'day'));
 		},
-		decrementDay: () => {
+		decrementDay() {
 			update((day) => day.subtract(1, 'day'));
 		},
-		reset: () => {
+		reset() {
 			set(dayjs().startOf('day'));
 		}
 	};
 }
 
-export const date = createDate();
+export const dateStore = createDate();

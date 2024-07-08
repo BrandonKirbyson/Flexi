@@ -1,38 +1,71 @@
 <script lang="ts">
+	import type { FlexSchedule } from '@/lib/types/FlexSchedule';
+	import { ENDPOINTS, fetchEndpoint } from '@/lib/util/endpoints';
+	import { dateStore } from '@/stores/date';
 	import dayjs, { type Dayjs } from 'dayjs';
+	import { onMount } from 'svelte';
+	import { get, writable } from 'svelte/store';
 	import MdiArrowLeft from 'virtual:icons/mdi/arrow-left';
 	import MdiArrowRight from 'virtual:icons/mdi/arrow-right';
-	let currentMonth = dayjs().startOf('month');
-	export let selectedDate = dayjs().startOf('day');
+
 	let days: dayjs.Dayjs[] = [];
+	let flexSchedules: FlexSchedule[] = [];
+	const currentMonthStore = writable(dayjs().startOf('month'));
+	let fetchedMonths: dayjs.Dayjs[] = [];
 
-	export let activeDays: dayjs.Dayjs[] = [];
+	onMount(() => {
+		currentMonthStore.subscribe(() => {
+			days = getAllDays();
+			fetchFlexSchedules();
+		});
+	});
 
-	$: currentMonth, (days = getAllDays());
+	function fetchFlexSchedules() {
+		const currentMonth = get(currentMonthStore);
+		if (fetchedMonths.some((month) => month.isSame(currentMonth, 'month'))) {
+			return;
+		}
+		const [start, end] = getCalendarRange();
 
-	function selectDate(day: dayjs.Dayjs) {
-		selectedDate = day;
+		fetchEndpoint(ENDPOINTS.GET.Flex.GetScheduleRange, {
+			startDate: start.format('YYYY-MM-DD'),
+			endDate: end.format('YYYY-MM-DD')
+		}).then((data) => {
+			fetchedMonths.push(currentMonth);
+			flexSchedules = data;
+			days = getAllDays();
+		});
 	}
 
-	function getAllDays() {
-		let days: Dayjs[] = [];
-		let current = currentMonth.startOf('month').startOf('week').add(1, 'day');
-		let end = currentMonth.endOf('month').endOf('week').add(1, 'day');
+	function getCalendarRange(): [dayjs.Dayjs, dayjs.Dayjs] {
+		let start = get(currentMonthStore).startOf('month').startOf('week');
+		let end = get(currentMonthStore).endOf('month').endOf('week');
+		return [start, end];
+	}
+
+	function getAllDays(): dayjs.Dayjs[] {
+		const days: Dayjs[] = [];
+		const [start, end] = getCalendarRange();
+		let current = start;
 		while (current.isBefore(end)) {
 			days.push(current);
 			current = current.add(1, 'day');
 		}
 		return days;
 	}
+
+	function isFlexDay(day: dayjs.Dayjs) {
+		return flexSchedules.some((schedule) => day.isSame(schedule.date, 'day'));
+	}
 </script>
 
 <div class="wrapper">
 	<div class="month-picker">
-		<button on:click={() => (currentMonth = currentMonth.subtract(1, 'month'))}>
+		<button on:click={() => ($currentMonthStore = $currentMonthStore.subtract(1, 'month'))}>
 			<MdiArrowLeft />
 		</button>
-		<h2>{currentMonth.format('MMMM YYYY')}</h2>
-		<button on:click={() => (currentMonth = currentMonth.add(1, 'month'))}>
+		<h2>{$currentMonthStore.format('MMMM YYYY')}</h2>
+		<button on:click={() => ($currentMonthStore = $currentMonthStore.add(1, 'month'))}>
 			<MdiArrowRight />
 		</button>
 	</div>
@@ -50,10 +83,10 @@
 		{#each days as day}
 			<button
 				class="day"
-				class:active={selectedDate && selectedDate === day}
-				class:flexDay={activeDays.map((x) => x.startOf('day')).includes(day.startOf('day'))}
-				class:faded={day.month() !== currentMonth.month()}
-				on:click={() => selectDate(day)}
+				class:active={$dateStore.isSame(day, 'day')}
+				class:flexDay={isFlexDay(day)}
+				class:faded={day.month() !== $currentMonthStore.month()}
+				on:click={() => dateStore.selectDay(day)}
 			>
 				{day.format('D')}
 			</button>

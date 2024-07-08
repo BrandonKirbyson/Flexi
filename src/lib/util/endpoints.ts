@@ -9,7 +9,8 @@ export const ENDPOINTS = {
 	GET: {
 		Flex: {
 			GetSchedule: '/api/flex/getSchedule',
-			GetClasses: '/api/flex/getClasses'
+			GetClasses: '/api/flex/getClasses',
+			GetScheduleRange: '/api/flex/getScheduleRange'
 		}
 	},
 	POST: {
@@ -32,6 +33,13 @@ export type FetchEndpointMap = Implements<
 			return: FlexSchedule | null;
 			params: {
 				date: string;
+			};
+		};
+		[ENDPOINTS.GET.Flex.GetScheduleRange]: {
+			return: FlexSchedule[];
+			params: {
+				startDate: string;
+				endDate: string;
 			};
 		};
 		[ENDPOINTS.GET.Flex.GetClasses]: {
