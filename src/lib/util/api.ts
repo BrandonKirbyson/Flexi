@@ -17,24 +17,10 @@ async function verifyAuth(event: RequestEvent): Promise<boolean> {
 	const authHeader = event.request.headers.get('Authorization');
 	if (!authHeader) return false;
 	const token = authHeader.split('Bearer ')[1];
-	console.log('VERIFYING', token);
-
-	adminAuth
-		.verifyIdToken(token)
-		.then((decodedToken) => {
-			console.log('DECODED TOKEN', decodedToken);
-		})
-		.catch((err: unknown) => {
-			console.log('ERROR', err);
-		});
-	// jwt.decode(token);
-	// const verified = jwt.verify(token, PRIVATE_KEY as string);
-	// console.log('VERIFIED', verified);
-	// return !!verified;
 
 	const decodedToken = await adminAuth.verifyIdToken(token);
-	console.log('UID', decodedToken.uid);
 	if (decodedToken.uid) return true;
+
 	return false;
 }
 
@@ -44,7 +30,6 @@ export async function apiFetch<T extends FlattenedEndpoints<'GET'>>(
 	cache: CacheType = CacheType.NONE
 ): Promise<Response> {
 	const auth = await verifyAuth(event);
-	console.log('AUTH', auth);
 	if (!auth) return new Response(null, { status: HttpStatusCode.UNAUTHORIZED });
 
 	const urlSearch = new URLSearchParams(event.request.url.split('?')[1]);

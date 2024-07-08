@@ -3,7 +3,6 @@ import {
 	PUBLIC_FB_API_KEY,
 	PUBLIC_FB_APP_ID,
 	PUBLIC_FB_AUTH_DOMAIN,
-	PUBLIC_FB_AUTH_PORT,
 	PUBLIC_FB_FIRESTORE_PORT,
 	PUBLIC_FB_LOCAL_URL,
 	PUBLIC_FB_MEASUREMENT_ID,
@@ -14,7 +13,7 @@ import {
 import type { FirebaseApp } from 'firebase/app';
 import { initializeApp } from 'firebase/app';
 import type { Auth } from 'firebase/auth';
-import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import {
 	CollectionReference,
 	collection,
@@ -59,9 +58,9 @@ export const initializeFirebase = () => {
 		db = getFirestore(app);
 
 		if (firebaseConfig.useEmulator) {
-			connectAuthEmulator(auth, `http://${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`, {
-				disableWarnings: true
-			});
+			// connectAuthEmulator(auth, `http://${PUBLIC_FB_LOCAL_URL}:${PUBLIC_FB_AUTH_PORT}`, {
+			// disableWarnings: true
+			// });
 			connectFirestoreEmulator(db, PUBLIC_FB_LOCAL_URL, parseInt(PUBLIC_FB_FIRESTORE_PORT, 10));
 
 			getCountFromServer(collection(db, 'classes')).then((snapshot) => {
