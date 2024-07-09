@@ -7,9 +7,9 @@ import { CollectionReference, Firestore, type DocumentData } from 'firebase-admi
 import type { FlexScheduleDocument } from '../types/FlexSchedule';
 
 const params: ServiceAccount = {
-	projectId: PROJECT_ID as string,
-	privateKey: PRIVATE_KEY as string,
-	clientEmail: CLIENT_EMAIL as string
+	projectId: PROJECT_ID,
+	privateKey: PRIVATE_KEY,
+	clientEmail: CLIENT_EMAIL
 };
 
 const isDev = import.meta.env.DEV;
