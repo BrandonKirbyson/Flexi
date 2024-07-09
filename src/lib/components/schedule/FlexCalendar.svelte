@@ -22,9 +22,7 @@
 
 	function fetchFlexSchedules() {
 		const currentMonth = get(currentMonthStore);
-		if (fetchedMonths.some((month) => month.isSame(currentMonth, 'month'))) {
-			return;
-		}
+		if (fetchedMonths.some((month) => month.isSame(currentMonth, 'month'))) return;
 		const [start, end] = getCalendarRange();
 
 		fetchEndpoint(ENDPOINTS.GET.Flex.GetScheduleRange, {
@@ -37,11 +35,10 @@
 		});
 	}
 
-	function getCalendarRange(): [dayjs.Dayjs, dayjs.Dayjs] {
-		let start = get(currentMonthStore).startOf('month').startOf('week');
-		let end = get(currentMonthStore).endOf('month').endOf('week');
-		return [start, end];
-	}
+	const getCalendarRange = () => [
+		get(currentMonthStore).startOf('month').startOf('week'),
+		get(currentMonthStore).endOf('month').endOf('week')
+	];
 
 	function getAllDays(): dayjs.Dayjs[] {
 		const days: Dayjs[] = [];
@@ -54,9 +51,8 @@
 		return days;
 	}
 
-	function isFlexDay(day: dayjs.Dayjs) {
-		return flexSchedules.some((schedule) => day.isSame(schedule.date, 'day'));
-	}
+	const isFlexDay = (day: dayjs.Dayjs) =>
+		flexSchedules.some((schedule) => day.isSame(schedule.date, 'day'));
 </script>
 
 <div class="wrapper">
