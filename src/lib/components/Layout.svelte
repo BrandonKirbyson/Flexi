@@ -6,8 +6,12 @@
 	<slot name="sidebar"></slot>
 
 	<div class="content">
-		<Header />
-		<slot name="content"></slot>
+		<div class="header-wrapper">
+			<Header />
+		</div>
+		<div class="content-wrapper">
+			<slot name="content"></slot>
+		</div>
 	</div>
 </div>
 
@@ -18,12 +22,20 @@
 		height: 100%;
 
 		.content {
-			background-color: var(--bg-secondary);
+			// background-color: var(--bg-secondary);
 			overflow: hidden;
 
-			display: flex;
-			flex-direction: column;
-			padding-bottom: 2rem;
+			&-wrapper {
+				overflow: scroll;
+				height: 100%;
+			}
+
+			// display: flex;
+			// flex-direction: column;
+			// padding-bottom: 2rem;
+
+			// .header-wrapper {
+			// }
 		}
 
 		div {

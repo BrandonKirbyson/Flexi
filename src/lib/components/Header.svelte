@@ -16,6 +16,9 @@
 </div>
 
 <style lang="scss">
+	.wrapper {
+		height: 4.5rem;
+	}
 	.skeleton {
 		animation: skeleton-loading 1s linear infinite alternate;
 		width: 30ch !important;

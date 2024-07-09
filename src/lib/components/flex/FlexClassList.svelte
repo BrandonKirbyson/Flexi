@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { session } from '@/stores/user';
 	import { onMount } from 'svelte';
-	import type { Flex } from '../types/Flex';
-	import { ENDPOINTS, fetchEndpoint } from '../util/endpoints';
+	import type { Flex } from '../../types/Flex';
+	import { ENDPOINTS, fetchEndpoint } from '../../util/endpoints';
 
 	let classes: Record<string, Flex> | undefined = undefined;
 	async function getClasses() {
@@ -27,24 +27,27 @@
 	{#if !classes}
 		<h1>Loading...</h1>
 	{:else}
-		{#each Object.entries(classes) as [id, flex]}
-			<div class="flex-item">
-				<div class="title">
-					<span class="title-name">{flex.title}</span>
-					<span class="title-dept">{flex.dept}</span>
+		<div class="test">
+			{#each Object.entries(classes) as [id, flex]}
+				<div class="flex-item">
+					<div class="title">
+						<span class="title-name">{flex.title}</span>
+						<span class="title-dept">{flex.dept}</span>
+					</div>
+					<p>{JSON.stringify(flex)}</p>
 				</div>
-				<p>{JSON.stringify(flex)}</p>
-			</div>
-		{/each}
+			{/each}
+		</div>
 	{/if}
 </div>
 
 <style lang="scss">
 	.wrapper {
-		// display: flex;
-		// flex-direction: column;
-		height: 100%;
+		display: flex;
+		flex-direction: column;
 		overflow: scroll;
+		outline: 1px solid red;
+		height: 100%;
 	}
 
 	.flex-item {
