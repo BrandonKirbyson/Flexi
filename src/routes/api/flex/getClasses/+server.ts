@@ -2,7 +2,7 @@ import { flexAdminCollection } from '@/lib/firebase/admin';
 import { HttpStatusCode } from '@/lib/types/HttpStatus';
 import { apiFetch } from '@/lib/util/api';
 import { ENDPOINTS } from '@/lib/util/endpoints';
-import type { RequestEvent } from '../$types';
+import type { RequestEvent } from '@sveltejs/kit';
 
 export async function GET(event: RequestEvent): Promise<Response> {
 	return await apiFetch<typeof ENDPOINTS.GET.Flex.GetClasses>(event, async () => {
