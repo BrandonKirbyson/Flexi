@@ -14,7 +14,7 @@
 	<Layout>
 		<Sidebar slot="sidebar">
 			<Tab title="Dashboard" icon={MdiHome} />
-			<Tab title="Schedule" icon={MdiStar} />
+			<Tab title="Flex" icon={MdiStar} />
 			<Tab title="Settings" icon={MdiGear} />
 		</Sidebar>
 

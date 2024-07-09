@@ -1,3 +1,5 @@
+import { redirect } from '@sveltejs/kit';
+
 export function load() {
-	// if (get(session).userType === UserType.Admin) return redirect(308, '/admin/dashboard');
+	return redirect(308, '/admin/dashboard');
 }
