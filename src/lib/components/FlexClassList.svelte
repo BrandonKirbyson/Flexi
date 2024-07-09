@@ -5,7 +5,6 @@
 	import { ENDPOINTS, fetchEndpoint } from '../util/endpoints';
 
 	let classes: Record<string, Flex> | undefined = undefined;
-	let error: string | undefined = undefined;
 	async function getClasses() {
 		if (classes) return;
 
@@ -13,7 +12,7 @@
 			const res = await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses);
 			classes = res;
 		} catch (e) {
-			error = e as string;
+			console.error('Error fetching classes: ', e);
 		}
 	}
 
@@ -27,8 +26,6 @@
 <div class="wrapper">
 	{#if !classes}
 		<h1>Loading...</h1>
-	{:else if error}
-		{error}
 	{:else}
 		{#each Object.entries(classes) as [id, flex]}
 			<div class="flex-item">
