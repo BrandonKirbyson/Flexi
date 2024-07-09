@@ -14,7 +14,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			.limit(31)
 			.get();
 
-		if (snapshot.docs.length === 0) return [[], HttpStatusCode.SUCCESS_NO_CONTENT];
+		if (snapshot.docs.length === 0) return [[], HttpStatusCode.SUCCESS];
 
 		const flexSchedules = snapshot.docs.map((doc) => {
 			return {

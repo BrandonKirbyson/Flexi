@@ -7,9 +7,6 @@
 
 	let schedule: FlexSchedule | null = null;
 
-	// const dateStore = writable(selectedDate);
-	// $: dateStore.set(selectedDate);
-
 	onMount(() => {
 		dateStore.subscribe(() => {
 			fetchSchedule();

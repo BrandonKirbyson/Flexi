@@ -32,7 +32,7 @@
 			endDate: end.format('YYYY-MM-DD')
 		}).then((data) => {
 			fetchedMonths.push(currentMonth);
-			flexSchedules = data;
+			flexSchedules = [...data, ...flexSchedules];
 			days = getAllDays();
 		});
 	}
