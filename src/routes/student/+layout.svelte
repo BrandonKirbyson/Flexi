@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Header from '@/lib/components/Header.svelte';
 	import Layout from '@/lib/components/Layout.svelte';
 	import Sidebar from '@/lib/components/sidebar/Sidebar.svelte';
 	import Tab from '@/lib/components/sidebar/Tab.svelte';
@@ -23,8 +22,6 @@
 			<Tab title="Flex" icon={MdiClock} />
 			<Tab title="Settings" icon={MdiGear} />
 		</Sidebar>
-
-		<Header slot="header" datePicker={route.endsWith('flex')}>Test</Header>
 
 		<div slot="content">
 			<slot></slot>

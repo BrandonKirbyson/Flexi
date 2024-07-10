@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { FlexSchedule } from '@/lib/types/FlexSchedule';
 	import { ENDPOINTS, fetchEndpoint } from '@/lib/util/endpoints';
-	import { dateStore } from '@/stores/date';
 	import dayjs, { type Dayjs } from 'dayjs';
 	import { onMount } from 'svelte';
 	import { get, writable } from 'svelte/store';
@@ -44,7 +43,6 @@
 	];
 
 	function selectDate(day: Dayjs) {
-		dateStore.selectDay(day);
 		selectedDate = day;
 	}
 
@@ -87,7 +85,7 @@
 		{#each days as day}
 			<button
 				class="day"
-				class:active={$dateStore.isSame(day, 'day')}
+				class:active={selectedDate.isSame(day, 'day')}
 				class:flexDay={isFlexDay(day)}
 				class:faded={day.month() !== $currentMonthStore.month()}
 				on:click={() => selectDate(day)}

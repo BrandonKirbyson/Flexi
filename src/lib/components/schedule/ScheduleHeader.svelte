@@ -1,19 +1,31 @@
 <script lang="ts">
-	import dayjs from 'dayjs';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { DAY_FORMAT } from '@/lib/util/date';
+	import dayjs, { Dayjs } from 'dayjs';
 	import FlexCalendar from './FlexCalendar.svelte';
 
-	const toggle = () => (showing = !showing);
+	const toggle = () => {
+		if (showing) {
+			console.log(selectedDate.format(DAY_FORMAT));
+			goto(selectedDate.format(DAY_FORMAT));
+		}
+		showing = !showing;
+	};
 
-	$: selectedDate = dayjs();
+	let selectedDate: Dayjs;
+
+	$: slug = $page.url.pathname.split('/').pop();
+	$: selectedDate = dayjs(slug || new Date());
 	$: showing = false;
 </script>
 
 <div class="wrapper">
-	<button on:click={() => (selectedDate = selectedDate.subtract(1, 'day'))}>-</button>
+	<a href={selectedDate.subtract(1, 'day').format(DAY_FORMAT)}>Prev</a>
 	<span class="date">
 		{selectedDate.format('dddd, MMMM D')}
 	</span>
-	<button on:click={() => (selectedDate = selectedDate.add(1, 'day'))}>+</button>
+	<a href={selectedDate.add(1, 'day').format(DAY_FORMAT)}>Next</a>
 
 	<button on:click={toggle}>Show Calendar</button>
 	<div class="calendar-wrapper" class:showing>

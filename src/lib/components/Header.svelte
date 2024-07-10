@@ -3,9 +3,13 @@
 	import MdiStore24Hour from 'virtual:icons/mdi/store-24-hour';
 	import ScheduleHeader from './schedule/ScheduleHeader.svelte';
 
-	export let datePicker = false;
-
 	$: title = $page.url.pathname.split('/').pop() || 'Home';
+	$: datePicker = hasDatePicker($page.url.pathname);
+
+	function hasDatePicker(path: string) {
+		const regex = /\d{4}-\d{2}-\d{2}$/;
+		return regex.test(path.split('/').pop() || '');
+	}
 </script>
 
 <div class="wrapper">
