@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-
-	$: url = $page.url.pathname.split('/').pop();
 </script>
 
 <div class="sidebar-wrapper">
@@ -9,7 +6,6 @@
 		<div class="logo-pic"></div>
 		<h1>Flexi</h1>
 	</div>
-	<!-- <div class="divider"></div> -->
 	<div class="tabs">
 		<slot />
 	</div>

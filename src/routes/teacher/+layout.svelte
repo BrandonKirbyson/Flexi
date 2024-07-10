@@ -9,7 +9,7 @@
 </script>
 
 {#if $session.loading}
-	loadSvelteConfig...
+	<h1>Loading...</h1>
 {:else}
 	<Layout>
 		<Sidebar slot="sidebar">

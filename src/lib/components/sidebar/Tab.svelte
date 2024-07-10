@@ -6,9 +6,10 @@
 	export let icon: ComponentType;
 
 	$: active = $page.url.pathname.split('/').pop() === title.toLowerCase();
+	$: href = `/${$page.url.pathname.split('/')[1]}/${title.toLowerCase()}`;
 </script>
 
-<a class="tab" href={title.toLowerCase()} class:active>
+<a class="tab" {href} class:active>
 	<div class="icon">
 		<svelte:component this={icon} />
 	</div>
