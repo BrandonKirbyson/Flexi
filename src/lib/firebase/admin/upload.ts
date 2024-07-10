@@ -1,11 +1,25 @@
+import type { Name } from '@/lib/types/User';
 import { DAY_FORMAT } from '@/lib/util/date';
 import { formatNameToName } from '@/lib/util/name';
 import dayjs from 'dayjs';
 import { collection, doc, setDoc, writeBatch } from 'firebase/firestore';
 import classes from '../../assets/schoolData/classes.json';
+import teacherRooms from '../../assets/schoolData/teacherRooms.json';
 import students from '../../assets/schoolData/users.json';
 import { FlexType, deptNameToEnum, type Flex, type FlexDocument } from '../../types/Flex';
 import { db } from '../firebase';
+
+function getCourseRoom(name: Name) {
+	const arr = Object.entries(teacherRooms);
+	return (arr.find(([key, value]) => {
+		const split = key.split(' ');
+		if (
+			split[0] === name.first.toLowerCase() &&
+			split[split.length - 1] === name.last.toLowerCase()
+		)
+			return value;
+	}) || ['', 'Unknown'])[1];
+}
 
 export function uploadClassData() {
 	if (!db) throw new Error('Firestore not initialized');
@@ -18,7 +32,8 @@ export function uploadClassData() {
 			type: FlexType.Class,
 			title: course.courseNameOriginal,
 			dept: deptNameToEnum(course.departmentName),
-			room: course.courseRoom,
+			// room: course.courseRoom,
+			room: getCourseRoom({ first: course.stafferFirstName, last: course.stafferLastName }),
 			teacher: formatNameToName({ first: course.stafferFirstName, last: course.stafferLastName }),
 			seats: course.maxNumberStudents,
 			students: {
