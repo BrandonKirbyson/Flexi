@@ -38,8 +38,18 @@
 </script>
 
 <div class="wrapper">
-	<input type="text" bind:value={filterOpts.search} placeholder="Search for flex" />
+	<input
+		type="text"
+		bind:value={filterOpts.search}
+		class="search-class-input"
+		placeholder="Search for flex"
+	/>
 </div>
 
 <style lang="scss">
+	.search-class-input {
+		width: 100%;
+		padding: 0.5rem 0;
+		border: 1px solid var(--border);
+	}
 </style>
