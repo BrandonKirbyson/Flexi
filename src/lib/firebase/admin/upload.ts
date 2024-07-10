@@ -17,7 +17,7 @@ function getCourseRoom(name: Name) {
 		const lNameSplit = name.last.toLowerCase().split(' ');
 		if (split[0] === fNameSplit[0] && split[split.length - 1] === lNameSplit[lNameSplit.length - 1])
 			return value;
-	}) || ['', 'Unknown'])[1];
+	}) || ['', 'Unknown'])[1].trim();
 }
 
 export function uploadClassData() {

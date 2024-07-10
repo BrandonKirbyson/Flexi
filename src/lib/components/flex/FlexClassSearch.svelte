@@ -10,8 +10,9 @@
 	};
 
 	function filterSearch() {
-		console.log(filterOpts);
+		console.log(filterOpts.dept?.length, filterOpts.search);
 		if (!filterOpts.search && !filterOpts.dept?.length) {
+			console.log('this called');
 			classes = originalClasses;
 			return;
 		}
@@ -54,7 +55,12 @@
 		classes = filteredClasses;
 	}
 
-	$: (filterOpts.dept?.length || filterOpts.search) && filterSearch();
+	$: {
+		filterOpts.dept?.length;
+		filterOpts.search;
+		filterSearch();
+	}
+	// $: filterOpts.dept?.length || filterOpts.search || filterSearch();
 </script>
 
 <div class="wrapper">
@@ -65,9 +71,26 @@
 		placeholder="Search for flex"
 	/>
 
-	<button on:click={() => (filterOpts.dept = [...(filterOpts.dept || []), FlexDept.Math])}
-		>Math</button
-	>
+	{#each Object.values(FlexDept) as dept}
+		<!-- <button on:click={() => (filterOpts.dept = [...(filterOpts.dept || []), FlexDept.Math])}
+			>Math</button
+		> -->
+		{#if filterOpts.dept?.includes(dept)}
+			<button
+				on:click={() => (filterOpts.dept = filterOpts.dept?.filter((d) => d !== dept))}
+				class="active"
+			>
+				{dept}
+			</button>
+		{:else}
+			<button on:click={() => (filterOpts.dept = [...(filterOpts.dept || []), dept])}>
+				{dept}
+			</button>
+		{/if}
+		<!-- <button on:click={() => (filterOpts.dept = [...(filterOpts.dept || []), dept])}>
+			{dept}
+		</button> -->
+	{/each}
 </div>
 
 <style lang="scss">
@@ -75,5 +98,9 @@
 		width: 100%;
 		padding: 0.5rem 0;
 		border: 1px solid var(--border);
+	}
+
+	.active {
+		background: red;
 	}
 </style>
