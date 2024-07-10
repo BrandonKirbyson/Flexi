@@ -13,6 +13,7 @@ export interface FlexFilter {
 	search?: string;
 	dept?: FlexDept[];
 	type?: FlexType;
+	zero?: boolean;
 }
 
 export interface Flex {
@@ -38,7 +39,6 @@ export enum FlexDept {
 	History = 'History',
 	Language = 'Language',
 	PE = 'PE',
-	Art = 'Art',
 	Other = 'Other',
 	Feature = 'Feature'
 }

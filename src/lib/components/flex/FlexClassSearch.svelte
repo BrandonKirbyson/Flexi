@@ -6,18 +6,18 @@
 
 	const filterOpts: FlexFilter = {
 		search: '',
-		dept: []
+		dept: [],
+		zero: false
 	};
 
 	function filterSearch() {
-		console.log(filterOpts.dept?.length, filterOpts.search);
-		if (!filterOpts.search && !filterOpts.dept?.length) {
+		if (!filterOpts.search && !filterOpts.dept?.length && filterOpts.zero) {
 			console.log('this called');
 			classes = originalClasses;
 			return;
 		}
 
-		const { search, dept } = filterOpts;
+		const { search, dept, zero } = filterOpts;
 		console.log(search, originalClasses, classes);
 
 		const filteredClasses: [string, Flex][] = [];
@@ -40,11 +40,17 @@
 			);
 		};
 
+		const checkZero = (value: Flex) => {
+			if (zero) return true;
+			return value.seats !== 0;
+		};
+
 		originalClasses.forEach(([key, value]) => {
 			if (
 				// (dept?.some((d) => d === value.dept) && checkIncludes(value.teacher.last)) ||
 				// checkIncludes(value.title) ||
 				// checkIncludes(value.dept.toString())
+				checkZero(value) &&
 				checkDepts(value) &&
 				checkString(value)
 			) {
@@ -55,12 +61,18 @@
 		classes = filteredClasses;
 	}
 
+	function toggleDept(dept: FlexDept) {
+		if (filterOpts.dept?.includes(dept))
+			filterOpts.dept = filterOpts.dept?.filter((d) => d !== dept);
+		else filterOpts.dept = [...(filterOpts.dept || []), dept];
+	}
+
 	$: {
 		filterOpts.dept?.length;
 		filterOpts.search;
+		filterOpts.zero;
 		filterSearch();
 	}
-	// $: filterOpts.dept?.length || filterOpts.search || filterSearch();
 </script>
 
 <div class="wrapper">
@@ -72,10 +84,10 @@
 	/>
 
 	{#each Object.values(FlexDept) as dept}
-		<!-- <button on:click={() => (filterOpts.dept = [...(filterOpts.dept || []), FlexDept.Math])}
-			>Math</button
-		> -->
-		{#if filterOpts.dept?.includes(dept)}
+		<button on:click={() => toggleDept(dept)} class:active={filterOpts.dept?.includes(dept)}>
+			{dept}
+		</button>
+		<!-- {#if filterOpts.dept?.includes(dept)}
 			<button
 				on:click={() => (filterOpts.dept = filterOpts.dept?.filter((d) => d !== dept))}
 				class="active"
@@ -86,11 +98,10 @@
 			<button on:click={() => (filterOpts.dept = [...(filterOpts.dept || []), dept])}>
 				{dept}
 			</button>
-		{/if}
-		<!-- <button on:click={() => (filterOpts.dept = [...(filterOpts.dept || []), dept])}>
-			{dept}
-		</button> -->
+		{/if} -->
 	{/each}
+
+	<button on:click={() => (filterOpts.zero = !filterOpts.zero)}>Zero</button>
 </div>
 
 <style lang="scss">
