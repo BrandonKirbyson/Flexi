@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs';
+import type { Dayjs } from 'dayjs';
 
 /**
  * FlexSchedule is the schedule of a single day for all the students signed up and settings for each class on that particular day.

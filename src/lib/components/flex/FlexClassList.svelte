@@ -3,19 +3,21 @@
 	import type { Flex } from '../../types/Flex';
 	import { ENDPOINTS, fetchEndpoint } from '../../util/endpoints';
 	import FlexClassItem from './FlexClassItem.svelte';
+	import FlexClassSearch from './FlexClassSearch.svelte';
 
-	let classes: Record<string, Flex>;
+	let classTuple: [string, Flex][] = [];
 
 	onMount(async () => {
-		classes = await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses);
+		classTuple = Object.entries(await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses));
 	});
 </script>
 
 <div class="wrapper">
-	{#if !classes}
+	{#if !classTuple}
 		<h1>Loading...</h1>
 	{:else}
-		{#each Object.values(classes) as flex}
+		<FlexClassSearch bind:classes={classTuple} />
+		{#each classTuple as [_, flex]}
 			<FlexClassItem {flex} />
 		{/each}
 	{/if}

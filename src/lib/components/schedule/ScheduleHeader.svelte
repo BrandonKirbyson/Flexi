@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { DAY_FORMAT } from '@/lib/util/date';
-	import dayjs, { Dayjs } from 'dayjs';
+	import dayjs, { type Dayjs } from 'dayjs';
 	import FlexCalendar from './FlexCalendar.svelte';
 
 	const toggle = () => {
