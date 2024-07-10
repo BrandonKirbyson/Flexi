@@ -13,7 +13,7 @@
 		if (!filterOpts.search) return (classes = originalClasses);
 
 		const { search, dept } = filterOpts;
-		console.log(search, originalClasses);
+		console.log(search, originalClasses, classes);
 
 		const filteredClasses: [string, Flex][] = [];
 		const checkIncludes = (value: string) =>

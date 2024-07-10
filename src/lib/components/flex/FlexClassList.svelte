@@ -13,7 +13,7 @@
 </script>
 
 <div class="wrapper">
-	{#if !classTuple}
+	{#if classTuple.length === 0}
 		<h1>Loading...</h1>
 	{:else}
 		<FlexClassSearch bind:classes={classTuple} />
