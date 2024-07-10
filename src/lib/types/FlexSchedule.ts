@@ -15,6 +15,7 @@ export interface FlexScheduleDocument extends Omit<FlexSchedule, 'date'> {
 export interface ClassSchedule {
 	settings: ClassSettings;
 	students: string[];
+	teacher: string;
 }
 
 export enum FlexAvaliabilityType {
