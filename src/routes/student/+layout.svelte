@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import Header from '@/lib/components/Header.svelte';
 	import Layout from '@/lib/components/Layout.svelte';
 	import Sidebar from '@/lib/components/sidebar/Sidebar.svelte';
 	import Tab from '@/lib/components/sidebar/Tab.svelte';
@@ -6,6 +8,8 @@
 	import MdiGear from 'virtual:icons/mdi/gear';
 	import MdiHome from 'virtual:icons/mdi/home';
 	import MdiStar from 'virtual:icons/mdi/star';
+
+	const route = $page.url.pathname;
 </script>
 
 <Layout>
@@ -16,7 +20,21 @@
 		<Tab title="Settings" icon={MdiGear} />
 	</Sidebar>
 
+	{route}
+	<Header slot="header" datePicker={route.endsWith('flex')}>Test</Header>
+
 	<div slot="content">
 		<slot></slot>
 	</div>
 </Layout>
+
+<style lang="scss">
+	.header-wrapper {
+		// display: flex;
+		width: 100px;
+		height: 100px;
+		// justify-content: center;
+		// padding: 1rem;
+		outline: 1px solid red;
+	}
+</style>

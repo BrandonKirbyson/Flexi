@@ -2,11 +2,17 @@
 	import { page } from '$app/stores';
 	import MdiStore24Hour from 'virtual:icons/mdi/store-24-hour';
 
+	export let datePicker = false;
+
 	$: title = $page.url.pathname.split('/').pop() || 'Home';
 </script>
 
 <div class="wrapper">
 	<span>{title.charAt(0).toUpperCase() + title.substring(1)}</span>
+
+	{#if datePicker}
+		Test date
+	{/if}
 
 	<div class="right-items">
 		<div class="settings">
@@ -18,6 +24,7 @@
 <style lang="scss">
 	.wrapper {
 		height: 4.5rem;
+		width: 100%;
 	}
 	.skeleton {
 		animation: skeleton-loading 1s linear infinite alternate;

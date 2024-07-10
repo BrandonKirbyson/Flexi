@@ -1,14 +1,13 @@
 <script lang="ts">
-	import Header from './Header.svelte';
 </script>
 
 <div class="wrapper">
 	<slot name="sidebar"></slot>
 
 	<div class="content">
-		<div class="header-wrapper">
-			<Header />
-		</div>
+		<!-- <div class="header-wrapper"> -->
+		<slot name="header"></slot>
+		<!-- </div> -->
 		<div class="content-wrapper">
 			<slot name="content"></slot>
 		</div>
@@ -22,6 +21,7 @@
 		height: 100%;
 
 		.content {
+			// border: 5px solid green;
 			// background-color: var(--bg-secondary);
 			overflow: hidden;
 
