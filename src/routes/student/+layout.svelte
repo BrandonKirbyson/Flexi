@@ -9,7 +9,7 @@
 	import MdiHome from 'virtual:icons/mdi/home';
 	import MdiStar from 'virtual:icons/mdi/star';
 
-	const route = $page.url.pathname;
+	$: route = $page.url.pathname;
 </script>
 
 <Layout>
@@ -20,7 +20,6 @@
 		<Tab title="Settings" icon={MdiGear} />
 	</Sidebar>
 
-	{route}
 	<Header slot="header" datePicker={route.endsWith('flex')}>Test</Header>
 
 	<div slot="content">
