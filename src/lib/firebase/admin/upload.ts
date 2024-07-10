@@ -13,10 +13,9 @@ function getCourseRoom(name: Name) {
 	const arr = Object.entries(teacherRooms);
 	return (arr.find(([key, value]) => {
 		const split = key.split(' ');
-		if (
-			split[0] === name.first.toLowerCase() &&
-			split[split.length - 1] === name.last.toLowerCase()
-		)
+		const fNameSplit = name.first.toLowerCase().split(' ');
+		const lNameSplit = name.last.toLowerCase().split(' ');
+		if (split[0] === fNameSplit[0] && split[split.length - 1] === lNameSplit[lNameSplit.length - 1])
 			return value;
 	}) || ['', 'Unknown'])[1];
 }
