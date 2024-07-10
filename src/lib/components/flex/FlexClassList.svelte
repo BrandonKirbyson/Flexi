@@ -1,83 +1,35 @@
 <script lang="ts">
-	import { session } from '@/stores/user';
 	import { onMount } from 'svelte';
 	import type { Flex } from '../../types/Flex';
 	import { ENDPOINTS, fetchEndpoint } from '../../util/endpoints';
+	import FlexClassItem from './FlexClassItem.svelte';
 
-	let classes: Record<string, Flex> | undefined = undefined;
-	async function getClasses() {
-		if (classes) return;
-
-		try {
-			const res = await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses);
-			classes = res;
-		} catch (e) {
-			console.error('Error fetching classes: ', e);
-		}
-	}
+	let classes: Record<string, Flex>;
 
 	onMount(() => {
-		session.subscribe((s) => {
-			if (!s.loading) getClasses();
-		});
+		fetchClasses();
 	});
+
+	function fetchClasses() {
+		fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses).then((data) => {
+			classes = data;
+		});
+	}
 </script>
 
 <div class="wrapper">
 	{#if !classes}
 		<h1>Loading...</h1>
 	{:else}
-		<div class="test">
-			{#each Object.entries(classes) as [id, flex]}
-				<div class="flex-item">
-					<div class="title">
-						<span class="title-name">{flex.title}</span>
-						<span class="title-dept">{flex.dept}</span>
-					</div>
-					<p>{JSON.stringify(flex)}</p>
-				</div>
-			{/each}
-		</div>
+		{#each Object.values(classes) as flex}
+			<FlexClassItem {flex} />
+		{/each}
 	{/if}
 </div>
 
 <style lang="scss">
 	.wrapper {
-		display: flex;
-		flex-direction: column;
 		overflow: scroll;
-		outline: 1px solid red;
 		height: 100%;
-	}
-
-	.flex-item {
-		margin: 1rem;
-		padding: 1rem;
-		border: 1px solid var(--border);
-		border-radius: 0.5rem;
-	}
-
-	.title {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		// &-name {
-		// 	font-size: 1.5rem;
-		// }
-
-		&-dept {
-			font-size: 1rem;
-			background-color: #ddd;
-			border: none;
-			color: black;
-			padding: 10px 20px;
-			text-align: center;
-			text-decoration: none;
-			display: inline-block;
-			margin: 4px 2px;
-			cursor: pointer;
-			border-radius: 16px;
-		}
 	}
 </style>
