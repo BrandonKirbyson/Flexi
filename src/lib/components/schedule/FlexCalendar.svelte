@@ -8,6 +8,9 @@
 	import MdiArrowLeft from 'virtual:icons/mdi/arrow-left';
 	import MdiArrowRight from 'virtual:icons/mdi/arrow-right';
 
+	export let miniMode = false;
+	export let selectedDate: Dayjs;
+
 	let days: dayjs.Dayjs[] = [];
 	let flexSchedules: FlexSchedule[] = [];
 	const currentMonthStore = writable(dayjs().startOf('month'));
@@ -40,6 +43,11 @@
 		get(currentMonthStore).endOf('month').endOf('week')
 	];
 
+	function selectDate(day: Dayjs) {
+		dateStore.selectDay(day);
+		selectedDate = day;
+	}
+
 	function getAllDays(): dayjs.Dayjs[] {
 		const days: Dayjs[] = [];
 		const [start, end] = getCalendarRange();
@@ -55,7 +63,7 @@
 		flexSchedules.some((schedule) => day.isSame(schedule.date, 'day'));
 </script>
 
-<div class="wrapper">
+<div class="wrapper" class:mini={miniMode}>
 	<div class="month-picker">
 		<button on:click={() => ($currentMonthStore = $currentMonthStore.subtract(1, 'month'))}>
 			<MdiArrowLeft />
@@ -82,7 +90,7 @@
 				class:active={$dateStore.isSame(day, 'day')}
 				class:flexDay={isFlexDay(day)}
 				class:faded={day.month() !== $currentMonthStore.month()}
-				on:click={() => dateStore.selectDay(day)}
+				on:click={() => selectDate(day)}
 			>
 				{day.format('D')}
 			</button>

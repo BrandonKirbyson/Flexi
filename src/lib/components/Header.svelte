@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import MdiStore24Hour from 'virtual:icons/mdi/store-24-hour';
+	import ScheduleHeader from './schedule/ScheduleHeader.svelte';
 
 	export let datePicker = false;
 
@@ -11,7 +12,7 @@
 	<span>{title.charAt(0).toUpperCase() + title.substring(1)}</span>
 
 	{#if datePicker}
-		Test date
+		<ScheduleHeader />
 	{/if}
 
 	<div class="right-items">

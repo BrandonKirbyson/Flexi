@@ -28,12 +28,4 @@
 </Layout>
 
 <style lang="scss">
-	.header-wrapper {
-		// display: flex;
-		width: 100px;
-		height: 100px;
-		// justify-content: center;
-		// padding: 1rem;
-		outline: 1px solid red;
-	}
 </style>
