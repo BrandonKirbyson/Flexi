@@ -1,46 +1,36 @@
 <script lang="ts">
 	import type { Flex } from '@/lib/types/Flex';
+	import { formatName } from '@/lib/util/name';
 
 	export let flex: Flex;
 </script>
 
-<div class="flex-item">
-	<div class="title">
+<div class="grid-item">
+	<!-- <div class="title">
 		<span class="title-name">{flex.title}</span>
 		<span class="title-dept">{flex.dept}</span>
 	</div>
-	<p>{JSON.stringify(flex)}</p>
+	<p>{JSON.stringify(flex)}</p> -->
+	<span class="title">{flex.title}</span>
+	<span class="teacher">{formatName(flex.teacher)}</span>
+	<span class="dept">{flex.dept}</span>
+	<span class="room">{flex.room}</span>
+	<span class="seats">{flex.seats}</span>
 </div>
 
 <style lang="scss">
-	.flex-item {
-		margin: 1rem;
-		padding: 1rem;
-		border: 1px solid var(--border);
-		border-radius: 0.5rem;
-	}
+	.grid-item {
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		grid-template-rows: 1fr;
+		width: 100%;
 
-	.title {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		// &-name {
-		// 	font-size: 1.5rem;
-		// }
-
-		&-dept {
-			font-size: 1rem;
-			background-color: #ddd;
-			border: none;
-			color: black;
-			padding: 10px 20px;
-			text-align: center;
-			text-decoration: none;
-			display: inline-block;
-			margin: 4px 2px;
-			cursor: pointer;
-			border-radius: 16px;
+		span {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 0.5rem;
+			border: 1px solid var(--border);
 		}
 	}
 </style>

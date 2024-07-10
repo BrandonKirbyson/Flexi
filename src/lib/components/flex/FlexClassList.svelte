@@ -6,15 +6,9 @@
 
 	let classes: Record<string, Flex>;
 
-	onMount(() => {
-		fetchClasses();
+	onMount(async () => {
+		classes = await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses);
 	});
-
-	function fetchClasses() {
-		fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses).then((data) => {
-			classes = data;
-		});
-	}
 </script>
 
 <div class="wrapper">
