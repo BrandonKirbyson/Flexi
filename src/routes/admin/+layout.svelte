@@ -15,6 +15,7 @@
 		<Sidebar slot="sidebar">
 			<Tab title="Dashboard" icon={MdiHome} />
 			<Tab title="Schedule" icon={MdiStar} />
+			<Tab title="Featured" icon={MdiStar} />
 			<Tab title="Settings" icon={MdiGear} />
 		</Sidebar>
 
@@ -24,9 +25,5 @@
 	</Layout>
 
 	<style lang="scss">
-		.content {
-			display: flex;
-			height: 100%;
-		}
 	</style>
 {/if}

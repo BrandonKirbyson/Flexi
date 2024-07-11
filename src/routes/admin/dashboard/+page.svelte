@@ -1,5 +1,4 @@
 <script lang="ts">
-	import FlexCalendar from '@/lib/components/schedule/FlexCalendar.svelte';
 	import type { Dayjs } from 'dayjs';
 
 	let date: Dayjs;
@@ -8,5 +7,5 @@
 <div>
 	<h1>Admin Dashboard</h1>
 
-	<FlexCalendar bind:selectedDate={date} />
+	<!-- <FlexCalendar bind:selectedDate={date} /> -->
 </div>

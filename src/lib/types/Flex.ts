@@ -24,7 +24,6 @@ export interface Flex {
 	dept: FlexDept;
 	seats: number;
 	teacher: Name;
-	// students: string[]; // Map<DATE STRING, ARRAY OF STUDENT IDS FOR THAT DATE
 	students: Record<string, string[] | undefined>;
 	imageUrl?: string;
 }
