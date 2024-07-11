@@ -16,7 +16,8 @@ export const ENDPOINTS = {
 	POST: {
 		Flex: {
 			AddSchedule: '/api/flex/addSchedule',
-			DeleteSchedule: '/api/flex/deleteSchedule'
+			DeleteSchedule: '/api/flex/deleteSchedule',
+			ScheduleStudent: '/api/flex/scheduleStudent'
 		}
 	}
 } as const;
@@ -53,7 +54,7 @@ export type PostEndpointMap = Implements<
 	EndpointMapType<'POST'>,
 	{
 		[ENDPOINTS.POST.Flex.AddSchedule]: {
-			return: FlexSchedule;
+			return: FlexSchedule | null;
 			params: {
 				date: string;
 			};
@@ -62,6 +63,14 @@ export type PostEndpointMap = Implements<
 			return: null;
 			params: {
 				date: string;
+			};
+		};
+		[ENDPOINTS.POST.Flex.ScheduleStudent]: {
+			return: null;
+			params: {
+				date: string;
+				flexId: string;
+				studentId: string;
 			};
 		};
 	}
