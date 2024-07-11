@@ -18,15 +18,12 @@
 		firstName: '',
 		lastName: ''
 	};
+
+	$: {
+		formFields;
+	}
 </script>
 
-<!-- type: FlexType;
-	title: string;
-	description?: string;
-	room: string;
-	seats: number;
-	teacher: Name;
-	imageUrl?: string; -->
 <div>
 	<form method="POST">
 		{#each Object.keys(formFields) as key}
@@ -35,14 +32,6 @@
 				<input bind:value={formFields[key]} type="text" />
 			</label>
 		{/each}
-		<!-- <label>
-			Title
-			<input name="Title" type="text" />
-		</label>
-		<label>
-			Description
-			<input name="Description" type="text" />
-		</label> -->
 		<button>Log in</button>
 	</form>
 </div>
