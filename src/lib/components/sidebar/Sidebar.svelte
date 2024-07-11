@@ -7,7 +7,7 @@
 <div class="sidebar-wrapper">
 	<div class="logo">
 		<div class="logo-pic"></div>
-		<h1>Flexi {route}</h1>
+		<h1>Flexi</h1>
 	</div>
 	<div class="tabs">
 		<slot />
