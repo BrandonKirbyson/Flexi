@@ -1,19 +1,52 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import MdiStore24Hour from 'virtual:icons/mdi/store-24-hour';
+	import { adminData, session, studentData, teacherData } from '@/stores/user';
+	import { onMount } from 'svelte';
+	import MdiUserCircle from '~icons/mdi/user-circle';
+	import type { Name } from '../types/User';
+	import { UserType } from '../types/UserType';
+	import { formatName } from '../util/name';
 	import ScheduleHeader from './schedule/ScheduleHeader.svelte';
 
-	$: title = $page.url.pathname.split('/').pop() || 'Home';
+	$: title = !datePicker
+		? $page.url.pathname.split('/').pop() || 'Home'
+		: $page.url.pathname.split('/').slice(-2, -1).pop() || 'Home';
 	$: datePicker = hasDatePicker($page.url.pathname);
+
+	let name: Name;
 
 	function hasDatePicker(path: string) {
 		const regex = /\d{4}-\d{2}-\d{2}$/;
 		return regex.test(path.split('/').pop() || '');
 	}
+
+	onMount(() => {
+		session.subscribe((value) => {
+			switch (value.userType) {
+				case UserType.Student:
+					studentData.subscribe((data) => {
+						if (!data) return;
+					});
+					break;
+				case UserType.Teacher:
+					teacherData.subscribe((data) => {
+						if (!data) return;
+						name = data.name;
+					});
+					break;
+				case UserType.Admin:
+					adminData.subscribe((data) => {
+						if (!data) return;
+						name = data.name;
+					});
+					break;
+			}
+		});
+	});
 </script>
 
 <div class="wrapper">
-	<span>{title.charAt(0).toUpperCase() + title.substring(1)}</span>
+	<h1>{title.charAt(0).toUpperCase() + title.substring(1)}</h1>
 
 	{#if datePicker}
 		<ScheduleHeader />
@@ -21,7 +54,10 @@
 
 	<div class="right-items">
 		<div class="settings">
-			<MdiStore24Hour color="var(--primary)" font-size="2rem" />
+			<MdiUserCircle />
+			{#if name}
+				<span>{formatName(name)}</span>
+			{/if}
 		</div>
 	</div>
 </div>
@@ -30,27 +66,6 @@
 	.wrapper {
 		height: 4.5rem;
 		width: 100%;
-	}
-	.skeleton {
-		animation: skeleton-loading 1s linear infinite alternate;
-		width: 30ch !important;
-		display: block;
-	}
-
-	@keyframes skeleton-loading {
-		0% {
-			background-color: hsl(200, 20%, 80%);
-		}
-		100% {
-			background-color: hsl(200, 20%, 95%);
-		}
-	}
-
-	.skeleton-text {
-		width: 100%;
-		height: 0.7rem;
-		margin-bottom: 0.5rem;
-		border-radius: 0.25rem;
 	}
 
 	.wrapper {
@@ -80,10 +95,13 @@
 			height: 100%;
 
 			.settings {
-				color: var(--text-secondary);
-				width: 2rem;
-				height: 2rem;
+				color: var(--text);
 				margin-right: 1rem;
+				font-size: 2rem;
+				display: flex;
+				align-items: center;
+				cursor: pointer;
+				gap: 0.5rem;
 			}
 
 			img {
