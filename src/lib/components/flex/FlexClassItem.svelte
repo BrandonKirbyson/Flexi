@@ -30,7 +30,7 @@
 			justify-content: center;
 			align-items: center;
 			padding: 0.5rem;
-			border: 1px solid var(--border);
+			border-right: 1px solid var(--border);
 		}
 	}
 </style>

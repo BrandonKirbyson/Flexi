@@ -5,37 +5,19 @@
 	import FlexClassItem from './FlexClassItem.svelte';
 	import FlexClassSearch from './FlexClassSearch.svelte';
 
-	let classTuple: [string, Flex][] = [];
+	let classes: Record<string, Flex> = {};
+	let filtered: string[] = [];
 
-	// async function getClasses() {
-	// 	classTuple = Object.entries(await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses));
-	// }
-
-	let loaded = false;
 	onMount(async () => {
-		classTuple = Object.entries(await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses));
-		loaded = true;
+		classes = await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses);
 	});
 </script>
 
 <div class="wrapper">
-	{#if !loaded}
-		<p>LOADING</p>
-	{:else}
-		<FlexClassSearch bind:classes={classTuple} />
-		{#each classTuple as [_, flex]}
-			<FlexClassItem {flex} />
-		{/each}
-	{/if}
-
-	<!-- {#await getClasses()}
-		LOADING
-	{:then _}
-		<FlexClassSearch bind:classes={classTuple} />
-		{#each classTuple as [_, flex]}
-			<FlexClassItem {flex} />
-		{/each}
-	{/await} -->
+	<FlexClassSearch bind:filtered {classes} />
+	{#each filtered as id}
+		<FlexClassItem flex={classes[id]} />
+	{/each}
 </div>
 
 <style lang="scss">

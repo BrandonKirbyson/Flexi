@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { FlexDept, type Flex, type FlexFilter } from '@/lib/types/Flex';
 
-	export let classes: [string, Flex][];
-	const originalClasses = [...classes];
+	export let classes: Record<string, Flex>;
+	export let filtered: string[];
 
 	const filterOpts: FlexFilter = {
 		search: '',
@@ -12,15 +12,13 @@
 
 	function filterSearch() {
 		if (!filterOpts.search && !filterOpts.dept?.length && filterOpts.zero) {
-			console.log('this called');
-			classes = originalClasses;
+			filtered = Object.keys(classes);
 			return;
 		}
 
 		const { search, dept, zero } = filterOpts;
-		console.log(search, originalClasses, classes);
 
-		const filteredClasses: [string, Flex][] = [];
+		const filteredClasses: string[] = [];
 		const checkIncludes = (value: string) =>
 			search &&
 			(value.toLowerCase().includes(search.toLowerCase().trim()) ||
@@ -45,20 +43,13 @@
 			return value.seats !== 0;
 		};
 
-		originalClasses.forEach(([key, value]) => {
-			if (
-				// (dept?.some((d) => d === value.dept) && checkIncludes(value.teacher.last)) ||
-				// checkIncludes(value.title) ||
-				// checkIncludes(value.dept.toString())
-				checkZero(value) &&
-				checkDepts(value) &&
-				checkString(value)
-			) {
-				filteredClasses.push([key, value]);
+		for (const [key, value] of Object.entries(classes)) {
+			if (checkZero(value) && checkDepts(value) && checkString(value)) {
+				filteredClasses.push(key);
 			}
-		});
+		}
 
-		classes = filteredClasses;
+		filtered = filteredClasses;
 	}
 
 	function toggleDept(dept: FlexDept) {
@@ -68,6 +59,7 @@
 	}
 
 	$: {
+		classes;
 		filterOpts.dept?.length;
 		filterOpts.search;
 		filterOpts.zero;
@@ -87,21 +79,11 @@
 		<button on:click={() => toggleDept(dept)} class:active={filterOpts.dept?.includes(dept)}>
 			{dept}
 		</button>
-		<!-- {#if filterOpts.dept?.includes(dept)}
-			<button
-				on:click={() => (filterOpts.dept = filterOpts.dept?.filter((d) => d !== dept))}
-				class="active"
-			>
-				{dept}
-			</button>
-		{:else}
-			<button on:click={() => (filterOpts.dept = [...(filterOpts.dept || []), dept])}>
-				{dept}
-			</button>
-		{/if} -->
 	{/each}
 
-	<button on:click={() => (filterOpts.zero = !filterOpts.zero)}>Zero</button>
+	<button on:click={() => (filterOpts.zero = !filterOpts.zero)} class:active={filterOpts.zero}>
+		Zero
+	</button>
 </div>
 
 <style lang="scss">
