@@ -17,7 +17,8 @@ export const ENDPOINTS = {
 		Flex: {
 			AddSchedule: '/api/flex/addSchedule',
 			DeleteSchedule: '/api/flex/deleteSchedule',
-			ScheduleStudent: '/api/flex/scheduleStudent'
+			ScheduleStudent: '/api/flex/scheduleStudent',
+			AddFeaturedFlex: '/api/flex/addFeaturedFlex'
 		}
 	}
 } as const;
@@ -71,6 +72,16 @@ export type PostEndpointMap = Implements<
 				date: string;
 				flexId: string;
 				studentId: string;
+			};
+		};
+		[ENDPOINTS.POST.Flex.AddFeaturedFlex]: {
+			return: Flex | null;
+			params: {
+				date: string;
+				title: string;
+				description: string;
+				firstName: string;
+				lastName: string;
 			};
 		};
 	}
