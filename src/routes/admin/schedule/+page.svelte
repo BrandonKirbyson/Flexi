@@ -1,13 +1,13 @@
 <script lang="ts">
 	import EditFlexDay from '@/lib/components/schedule/EditFlexDay.svelte';
-	import DatePicker from '@/lib/components/schedule/FlexCalendar.svelte';
+	import FlexCalendar from '@/lib/components/schedule/FlexCalendar.svelte';
 </script>
 
 <div class="split-screen">
 	<EditFlexDay />
 
 	<div class="right-sidebar">
-		<DatePicker />
+		<FlexCalendar />
 	</div>
 </div>
 

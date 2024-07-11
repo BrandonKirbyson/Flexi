@@ -6,11 +6,6 @@
 </script>
 
 <div class="grid-item">
-	<!-- <div class="title">
-		<span class="title-name">{flex.title}</span>
-		<span class="title-dept">{flex.dept}</span>
-	</div>
-	<p>{JSON.stringify(flex)}</p> -->
 	<span class="title">{flex.title}</span>
 	<span class="teacher">{formatName(flex.teacher)}</span>
 	<span class="dept">{flex.dept}</span>
