@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { Flex } from '@/lib/types/Flex';
 	import type { FlexSchedule } from '@/lib/types/FlexSchedule';
-	import { DAY_FORMAT } from '@/lib/util/date';
 	import { flexScheduleStore } from '@/stores/schedule';
+	import { session } from '@/stores/user';
 	import { type Dayjs } from 'dayjs';
 	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 	import { ENDPOINTS, fetchEndpoint } from '../../util/endpoints';
 	import FlexClassItem from './FlexClassItem.svelte';
 	import FlexClassSearch from './FlexClassSearch.svelte';
@@ -34,13 +35,17 @@
 </script>
 
 <div class="wrapper">
-	{date.format(DAY_FORMAT)}
 	{#if schedule == null}
 		<p>No schedule</p>
 	{:else}
 		<FlexClassSearch bind:filtered {classes} />
 		{#each filtered as id}
-			<FlexClassItem flex={classes[id]} />
+			<FlexClassItem
+				flex={classes[id]}
+				{id}
+				{date}
+				scheduled={schedule.classes[id].students.includes(get(session).uid ?? '')}
+			/>
 		{/each}
 	{/if}
 </div>
