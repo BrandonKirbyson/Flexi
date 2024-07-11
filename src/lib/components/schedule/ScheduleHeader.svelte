@@ -9,17 +9,14 @@
 	import FlexCalendar from './FlexCalendar.svelte';
 
 	const toggle = () => {
-		if (showing) {
-			console.log(selectedDate.format(DAY_FORMAT));
-			goto(selectedDate.format(DAY_FORMAT));
-		}
+		if (showing) goto(selectedDate.format(DAY_FORMAT));
 		showing = !showing;
 	};
 
 	let selectedDate: Dayjs;
 
 	$: slug = $page.url.pathname.split('/').pop();
-	$: selectedDate = dayjs(slug || new Date());
+	$: selectedDate = dayjs(slug ?? new Date());
 	$: showing = false;
 </script>
 
