@@ -2,15 +2,16 @@
 	import EditFlexDay from '@/lib/components/schedule/EditFlexDay.svelte';
 	import FlexCalendar from '@/lib/components/schedule/FlexCalendar.svelte';
 	import type { Dayjs } from 'dayjs';
+	import dayjs from 'dayjs';
 
-	let date: Dayjs;
+	let selectedDate: Dayjs = dayjs();
 </script>
 
 <div class="split-screen">
 	<EditFlexDay />
 
 	<div class="right-sidebar">
-		<FlexCalendar bind:selectedDate={date} />
+		<FlexCalendar bind:selectedDate />
 	</div>
 </div>
 

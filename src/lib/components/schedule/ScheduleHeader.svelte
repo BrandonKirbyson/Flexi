@@ -69,9 +69,15 @@
 		a {
 			text-decoration: none;
 			color: var(--text);
-			margin: 0 0.5rem;
+			padding: 0.5rem;
 			display: flex;
 			align-items: center;
+			border-radius: 0.5rem;
+
+			&:hover {
+				background-color: var(--bg-secondary);
+				outline: 1px solid var(--border);
+			}
 		}
 
 		button {
