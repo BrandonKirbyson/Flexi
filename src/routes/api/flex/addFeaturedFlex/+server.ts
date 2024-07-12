@@ -1,11 +1,15 @@
+import { HttpStatusCode } from '@/lib/types/HttpStatus';
 import { apiPost } from '@/lib/util/api';
 import { ENDPOINTS } from '@/lib/util/endpoints';
 import type { RequestEvent } from '@sveltejs/kit';
-import dayjs from 'dayjs';
 
 export async function POST(event: RequestEvent) {
 	return await apiPost<typeof ENDPOINTS.POST.Flex.AddFeaturedFlex>(event, async (params) => {
-		const date = dayjs(params.date);
+		// const date = dayjs(params.date);
+		await Promise.resolve();
+		console.log('Req', params);
+
+		return [null, HttpStatusCode.SUCCESS];
 
 		// const doc: FlexScheduleDocument = {
 		// 	date: date.format(DAY_FORMAT),

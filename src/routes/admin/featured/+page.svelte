@@ -1,12 +1,14 @@
 <script lang="ts">
-	import type { FlexFormProps } from '@/lib/types/Flex';
+	import { FlexDept, type FlexFormProps } from '@/lib/types/Flex';
 
 	const formFields: FlexFormProps = {
 		title: '',
 		description: '',
 		room: '',
 		seats: 0,
-		firstName: string
+		name: '',
+		dept: FlexDept.Feature,
+		imageUrl: ''
 	};
 
 	// let title = '';
@@ -21,25 +23,24 @@
 	<form method="POST">
 		<label>
 			Title
-			<input required type="text" bind:value={title} />
+			<input required type="text" bind:value={formFields.title} />
 		</label>
 		<label>
 			Description
-			<textarea bind:value={description}></textarea>
+			<textarea bind:value={formFields.description}></textarea>
 		</label>
 		<label>
 			Room
-			<input required type="text" bind:value={room} />
+			<input required type="text" bind:value={formFields.room} />
 		</label>
 		<label>
 			Seats
-			<input required type="number" bind:value={seats} />
+			<input required type="number" bind:value={formFields.seats} />
 		</label>
 
 		<label>
 			Name
-			<input required type="text" bind:value={firstName} />
-			<input required type="text" bind:value={lastName} />
+			<input required type="text" bind:value={formFields.name} />
 		</label>
 		<input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" />
 
