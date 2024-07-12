@@ -1,4 +1,5 @@
 // import type { FlexFormProps } from '@/lib/types/Flex';
+import { ENDPOINTS, postEndpoint } from '@/lib/util/endpoints';
 import type { Actions } from './$types';
 
 export interface FlexFormProps {
@@ -13,7 +14,8 @@ export interface FlexFormProps {
 export const actions = {
 	default: async ({ request }) => {
 		const data = await request.formData();
-		console.log('submit form ', data);
+		const imageURL = data.get('image');
+		if (imageURL) console.log('Image URL', imageURL);
 
 		// const image = data.get('image');
 		// if (image) console.log('Image', JSON.stringify(image));
@@ -26,12 +28,12 @@ export const actions = {
 		// 	return new Response('Missing required fields', { status: 400 });
 		// }
 
-		// postEndpoint(ENDPOINTS.POST.Flex.AddFeaturedFlex, {
-		// 	date: 'today',
-		// 	title: String(title),
-		// 	description: String(description),
-		// 	name: String(name)
-		// });
+		postEndpoint(ENDPOINTS.POST.Flex.AddFeaturedFlex, {
+			date: 'today',
+			title: 'hi',
+			description: 'desc',
+			name: 'Teacher Name'
+		});
 		return { success: true };
 	}
 } satisfies Actions;

@@ -14,6 +14,7 @@ export async function POST(event: RequestEvent) {
 			const file = adminStorage.bucket().file(filePath);
 
 			await file.save(buffer, { contentType: 'application/octet-stream' });
+			console.log('RETURNING', file.publicUrl());
 			return [file.publicUrl(), HttpStatusCode.SUCCESS_CREATED];
 		} catch (error) {
 			console.error('Error uploading file:', error);
