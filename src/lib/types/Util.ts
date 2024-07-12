@@ -8,7 +8,9 @@ export type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never
 
 export type Implements<T, U extends T> = U;
 
-type Primitive = string | number | boolean;
+export type Primitive = string | number | boolean;
+export type NullOrUndefined = null | undefined;
+export type PrimativeOrNull = Primitive | NullOrUndefined;
 type FlattenPairs<T> = {
 	[K in keyof T]: T[K] extends Primitive ? [K, T[K]] : FlattenPairs<T[K]>;
 }[keyof T] &

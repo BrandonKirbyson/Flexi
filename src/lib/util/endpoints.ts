@@ -2,7 +2,7 @@ import { getIdToken } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import type { Flex } from '../types/Flex';
 import type { FlexSchedule } from '../types/FlexSchedule';
-import type { Implements, ValueOf } from '../types/Util';
+import type { Flatten, Implements, PrimativeOrNull, ValueOf } from '../types/Util';
 
 export const ENDPOINTS = {
 	GET: {
@@ -93,35 +93,20 @@ export type PostEndpointMap = Implements<
 	}
 >;
 
-type PrimitiveType = string | number | boolean | null | undefined;
-
 // Trying to inline this breaks typescript 💀
 type X<T extends keyof typeof ENDPOINTS> = ValueOf<Flatten<(typeof ENDPOINTS)[T]>>;
 export type EndpointMapType<T extends keyof typeof ENDPOINTS> = {
 	[prop in T extends 'GET' ? X<'GET'> : X<'POST'>]: {
 		return: unknown;
 		params: T extends 'GET'
-			? Record<string, PrimitiveType> | EmptyObject
-			: Record<string, PrimitiveType>;
+			? Record<string, PrimativeOrNull> | EmptyObject
+			: Record<string, PrimativeOrNull>;
 	};
 };
-
-// type Keys<T extends keyof typeof ENDPOINTS> = (typeof ENDPOINTS)[T][keyof (typeof ENDPOINTS)[T]];
-
-type Primitive = string | number | boolean;
-type FlattenPairs<T> = {
-	[K in keyof T]: T[K] extends Primitive ? [K, T[K]] : FlattenPairs<T[K]>;
-}[keyof T] &
-	[PropertyKey, Primitive];
-type Flatten<T> = { [P in FlattenPairs<T> as P[0]]: P[1] };
 
 export type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = ValueOf<
 	Flatten<(typeof ENDPOINTS)[T]>
 >;
-// export type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = ValueOf<Flatten<Keys<T>>>;
-// export type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = UnionToIntersection<
-// 	Keys<T>
-// >[keyof UnionToIntersection<Keys<T>>];
 
 export async function fetchEndpoint<T extends FlattenedEndpoints<'GET'>>(
 	endpoint: T,
