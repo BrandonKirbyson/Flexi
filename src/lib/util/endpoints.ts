@@ -162,9 +162,17 @@ export async function postEndpoint<T extends FlattenedEndpoints<'POST'>>(
 	params: PostEndpointMap[T]['params'],
 	fetchFn = fetch
 ): Promise<PostEndpointMap[T]['return']> {
+	const user = auth?.currentUser;
+	if (!user) {
+		throw new Error('User is not authenticated');
+	}
+	const token = await getIdToken(user);
 	const res = await fetchFn(endpoint, {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`
+		},
 		body: JSON.stringify(params)
 	});
 	if (!res.status.toString(10).startsWith('2')) {
