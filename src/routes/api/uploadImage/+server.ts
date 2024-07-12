@@ -1,37 +1,42 @@
-import { scheduleAdminCollection } from '@/lib/firebase/admin';
 import { HttpStatusCode } from '@/lib/types/HttpStatus';
 import { apiPost } from '@/lib/util/api';
-import { DAY_FORMAT } from '@/lib/util/date';
 import { ENDPOINTS } from '@/lib/util/endpoints';
 import type { RequestEvent } from '@sveltejs/kit';
-import dayjs from 'dayjs';
+import { getStorage, ref, uploadBytes } from 'firebase/storage';
 
 export async function POST(event: RequestEvent) {
-	return await apiPost<typeof ENDPOINTS.POST.Flex.ScheduleStudent>(event, async (params) => {
-		const date = dayjs(params.date);
+	return await apiPost<typeof ENDPOINTS.POST.UploadImage>(event, async (params) => {
+		const storage = getStorage();
+		const storageRef = ref(storage, 'some-child');
 
-		const schedules = await scheduleAdminCollection
-			.where('date', '==', date.format(DAY_FORMAT))
-			.limit(1)
-			.get();
+		const snapshot = await uploadBytes(storageRef, params.file);
+		console.log('Uploaded a blob or file!', snapshot.ref.fullPath);
+		return [snapshot.ref.fullPath, HttpStatusCode.SUCCESS_CREATED];
 
-		if (schedules.empty) {
-			return [null, HttpStatusCode.NOT_FOUND];
-		}
+		// const date = dayjs(params.file);
 
-		const schedule = schedules.docs[0].data();
+		// const schedules = await scheduleAdminCollection
+		// 	.where('date', '==', date.format(DAY_FORMAT))
+		// 	.limit(1)
+		// 	.get();
 
-		for (const key in schedule.classes) {
-			if (schedule.classes[key].students.includes(params.studentId)) {
-				schedule.classes[key].students = schedule.classes[key].students.filter(
-					(student) => student !== params.studentId
-				);
-			}
-		}
+		// if (schedules.empty) {
+		// 	return [null, HttpStatusCode.NOT_FOUND];
+		// }
 
-		schedule.classes[params.flexId].students.push(params.studentId);
+		// const schedule = schedules.docs[0].data();
 
-		scheduleAdminCollection.doc(schedules.docs[0].id).set(schedule);
+		// for (const key in schedule.classes) {
+		// 	if (schedule.classes[key].students.includes(params.studentId)) {
+		// 		schedule.classes[key].students = schedule.classes[key].students.filter(
+		// 			(student) => student !== params.studentId
+		// 		);
+		// 	}
+		// }
+
+		// schedule.classes[params.flexId].students.push(params.studentId);
+
+		// scheduleAdminCollection.doc(schedules.docs[0].id).set(schedule);
 
 		return [null, HttpStatusCode.SUCCESS_CREATED];
 	});

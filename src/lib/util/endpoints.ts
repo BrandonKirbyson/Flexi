@@ -10,8 +10,7 @@ export const ENDPOINTS = {
 			GetSchedule: '/api/flex/getSchedule',
 			GetClasses: '/api/flex/getClasses',
 			GetScheduleRange: '/api/flex/getScheduleRange'
-		},
-		UploadImage: '/api/uploadImage'
+		}
 	},
 	POST: {
 		Flex: {
@@ -19,7 +18,8 @@ export const ENDPOINTS = {
 			DeleteSchedule: '/api/flex/deleteSchedule',
 			ScheduleStudent: '/api/flex/scheduleStudent',
 			AddFeaturedFlex: '/api/flex/addFeaturedFlex'
-		}
+		},
+		UploadImage: '/api/uploadImage'
 	}
 } as const;
 
@@ -48,12 +48,6 @@ export type FetchEndpointMap = Implements<
 		[ENDPOINTS.GET.Flex.GetClasses]: {
 			return: Record<string, Flex>;
 			params: EmptyObject;
-		};
-		[ENDPOINTS.GET.UploadImage]: {
-			return: string | null;
-			params: {
-				file: string;
-			};
 		};
 	}
 >;
@@ -90,8 +84,16 @@ export type PostEndpointMap = Implements<
 				name: string;
 			};
 		};
+		[ENDPOINTS.POST.UploadImage]: {
+			return: string | null;
+			params: {
+				file: File;
+			};
+		};
 	}
 >;
+
+type EndpointKey = PrimativeOrNull | File;
 
 // Trying to inline this breaks typescript 💀
 type X<T extends keyof typeof ENDPOINTS> = ValueOf<Flatten<(typeof ENDPOINTS)[T]>>;
@@ -99,8 +101,8 @@ export type EndpointMapType<T extends keyof typeof ENDPOINTS> = {
 	[prop in T extends 'GET' ? X<'GET'> : X<'POST'>]: {
 		return: unknown;
 		params: T extends 'GET'
-			? Record<string, PrimativeOrNull> | EmptyObject
-			: Record<string, PrimativeOrNull>;
+			? Record<string, EndpointKey> | EmptyObject
+			: Record<string, EndpointKey>;
 	};
 };
 
