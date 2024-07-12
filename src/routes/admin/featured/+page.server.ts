@@ -1,21 +1,14 @@
 // import type { FlexFormProps } from '@/lib/types/Flex';
-import { ENDPOINTS, postEndpoint } from '@/lib/util/endpoints';
+import { ENDPOINTS, postEndpoint, type FlexFormProps } from '@/lib/util/endpoints';
 import type { Actions } from './$types';
-
-export interface FlexFormProps {
-	title: string;
-	description: string;
-	room: string;
-	seats: number;
-	name: string;
-	imageUrl: string;
-}
 
 export const actions = {
 	default: async ({ request, fetch }) => {
 		const data = await request.formData();
-		const imageURL = data.get('image');
-		if (imageURL) console.log('Image URL', imageURL);
+		// const imageURL = data.get('image');
+		// if (imageURL) console.log('Image URL', imageURL);
+		const imageBlob = data.get('image');
+		console.log('this is the image blob', imageBlob);
 
 		// const image = data.get('image');
 		// if (image) console.log('Image', JSON.stringify(image));
@@ -28,16 +21,20 @@ export const actions = {
 		// 	return new Response('Missing required fields', { status: 400 });
 		// }
 
-		postEndpoint(
-			ENDPOINTS.POST.Flex.AddFeaturedFlex,
-			{
-				date: 'today',
-				title: 'hi',
-				description: 'desc',
-				name: 'Teacher Name'
-			},
-			fetch
-		);
+		const FlexClassData: FlexFormProps = {
+			date: new Date().toISOString(),
+			title: 'title',
+			description: 'description',
+			name: 'name'
+		};
+
+		if (imageBlob) {
+			const arr = new Uint8Array(await (imageBlob as Blob).arrayBuffer());
+			FlexClassData.imageUrl =
+				(await postEndpoint(ENDPOINTS.POST.UploadImage, { bytes: arr }, fetch)) ?? '';
+		}
+
+		postEndpoint(ENDPOINTS.POST.Flex.AddFeaturedFlex, FlexClassData, fetch);
 		return { success: true };
 	}
 } satisfies Actions;

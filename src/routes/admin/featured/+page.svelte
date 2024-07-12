@@ -3,7 +3,6 @@
 	import { invalidateAll } from '$app/navigation';
 	import { FlexDept, type FlexFormProps } from '@/lib/types/Flex';
 
-	import { ENDPOINTS, postEndpoint } from '@/lib/util/endpoints';
 	import type { ActionResult } from '@sveltejs/kit';
 	import type { ActionData } from '../$types';
 
@@ -35,11 +34,12 @@
 
 	async function handleSubmit(event: { currentTarget: EventTarget & HTMLFormElement }) {
 		const data = new FormData(event.currentTarget);
+		if (imgData) data.set('image', new Blob([imgData]));
 		const urlTarget = event.currentTarget.action;
-		if (imgData) {
-			const url = await postEndpoint(ENDPOINTS.POST.UploadImage, { bytes: imgData });
-			data.set('image', url ?? 'ERROR');
-		}
+		// if (imgData) {
+		// 	const url = await postEndpoint(ENDPOINTS.POST.UploadImage, { bytes: imgData });
+		// 	data.set('image', url ?? 'ERROR');
+		// }
 
 		const response = await fetch(urlTarget, {
 			method: 'POST',
