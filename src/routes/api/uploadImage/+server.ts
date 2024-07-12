@@ -9,9 +9,14 @@ export async function POST(event: RequestEvent) {
 		const storage = getStorage();
 		const storageRef = ref(storage, 'some-child');
 
-		const snapshot = await uploadBytes(storageRef, params.file);
-		console.log('Uploaded a blob or file!', snapshot.ref.fullPath);
-		return [snapshot.ref.fullPath, HttpStatusCode.SUCCESS_CREATED];
+		try {
+			const snapshot = await uploadBytes(storageRef, params.file);
+			console.log('Uploaded a blob or file!', snapshot.ref.fullPath);
+			return [snapshot.ref.fullPath, HttpStatusCode.SUCCESS_CREATED];
+		} catch (e) {
+			console.error('Error uploading file', e);
+			return [null, HttpStatusCode.BAD_REQUEST];
+		}
 
 		// const date = dayjs(params.file);
 

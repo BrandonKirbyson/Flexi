@@ -42,7 +42,7 @@ export interface FlexFormProps {
 	dept: FlexDept;
 	seats: number;
 	name: string;
-	imageUrl: string;
+	// imageUrl: string;
 }
 
 export enum FlexDept {
