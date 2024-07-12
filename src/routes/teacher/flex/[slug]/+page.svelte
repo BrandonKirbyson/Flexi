@@ -1,27 +1,25 @@
 <script lang="ts">
 	import type { ClassSchedule, FlexSchedule } from '@/lib/types/FlexSchedule';
-	import { DAY_FORMAT } from '@/lib/util/date';
 	import { ENDPOINTS, fetchEndpoint } from '@/lib/util/endpoints';
 	import { teacherData } from '@/stores/user.js';
-	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 
 	export let data;
 
-	let schedule: FlexSchedule | null;
+	let schedule: FlexSchedule | null = null;
 	let flex: ClassSchedule | null = null;
 
-	onMount(() => {
-		fetchFlexSchedule();
-	});
+	$: data.date && fetchFlexSchedule();
 
 	function fetchFlexSchedule() {
 		fetchEndpoint(ENDPOINTS.GET.Flex.GetSchedule, { date: data.date.format('YYYY-MM-DD') }).then(
-			(data) => {
-				schedule = data;
-				const teacherId = get(teacherData)?.uid;
-				if (teacherId && schedule) {
-					flex = Object.values(schedule.classes).find((c) => c.teacher === teacherId) || null;
+			(scheduleData) => {
+				schedule = scheduleData;
+				console.log(data.date.format('MMMM DD, YYYY'));
+				const classId = get(teacherData)?.class;
+
+				if (classId && schedule) {
+					flex = schedule.classes[classId] || null;
 				}
 			}
 		);
@@ -30,9 +28,6 @@
 
 <div class="wrapper">
 	<h1 class="date">{data.date.format('MMMM DD, YYYY')}</h1>
-
-	<a href="/teacher/flex/{data.date.add(-1, 'day').format(DAY_FORMAT)}">Previous</a>
-	<a href="/teacher/flex/{data.date.add(1, 'day').format(DAY_FORMAT)}">Next</a>
 
 	{#if schedule}
 		<h1>Flex today</h1>

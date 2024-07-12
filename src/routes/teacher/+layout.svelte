@@ -18,15 +18,11 @@
 			<Tab title="Settings" icon={MdiGear} />
 		</Sidebar>
 
-		<div class="content" slot="content">
+		<div slot="content">
 			<slot></slot>
 		</div>
 	</Layout>
 
 	<style lang="scss">
-		.content {
-			display: flex;
-			height: 100%;
-		}
 	</style>
 {/if}
