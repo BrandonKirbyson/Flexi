@@ -1,16 +1,8 @@
 import { getIdToken } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
-import type { Flex } from '../types/Flex';
+import type { Flex, FlexFormProps } from '../types/Flex';
 import type { FlexSchedule } from '../types/FlexSchedule';
 import type { Flatten, Implements, PrimativeOrNull, ValueOf } from '../types/Util';
-
-export interface FlexFormProps extends Record<string, string | number | undefined> {
-	date: string;
-	title: string;
-	description: string;
-	name: string;
-	imageUrl?: string;
-}
 
 export const ENDPOINTS = {
 	GET: {
@@ -86,15 +78,6 @@ export type PostEndpointMap = Implements<
 		[ENDPOINTS.POST.Flex.AddFeaturedFlex]: {
 			return: Flex | null;
 			params: FlexFormProps;
-			// params: {
-			// 	date: string;
-			// 	title: string;
-			// 	description: string;
-			// 	room: string;
-			// 	seats: number;
-			// 	name: string;
-			// 	imageUrl: string;
-			// };
 		};
 		[ENDPOINTS.POST.UploadImage]: {
 			return: string | null;

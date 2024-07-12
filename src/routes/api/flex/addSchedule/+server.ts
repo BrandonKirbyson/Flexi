@@ -8,10 +8,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import dayjs from 'dayjs';
 
 export async function POST(event: RequestEvent) {
-	return await apiPost<typeof ENDPOINTS.POST.Flex.AddFeaturedFlex>(event, async (params) => {
-		await Promise.resolve();
-		console.log('Req', params);
-
+	return await apiPost<typeof ENDPOINTS.POST.Flex.AddSchedule>(event, async (params) => {
 		const classesDoc = await flexAdminCollection.doc('classes').get();
 		const data = classesDoc.data();
 		if (!classesDoc.exists || !data) return [null, HttpStatusCode.NOT_FOUND];
@@ -32,6 +29,6 @@ export async function POST(event: RequestEvent) {
 			date: date
 		};
 
-		return [null, HttpStatusCode.SUCCESS];
+		return [schedule, HttpStatusCode.SUCCESS];
 	});
 }

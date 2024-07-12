@@ -1,5 +1,5 @@
-// import type { FlexFormProps } from '@/lib/types/Flex';
-import { ENDPOINTS, postEndpoint, type FlexFormProps } from '@/lib/util/endpoints';
+import type { FlexFormProps } from '@/lib/types/Flex';
+import { ENDPOINTS, postEndpoint } from '@/lib/util/endpoints';
 import type { Actions } from './$types';
 
 export const actions = {
@@ -7,7 +7,7 @@ export const actions = {
 		const data = await request.formData();
 		const imageBlob = data.get('image');
 
-		const FlexClassData: FlexFormProps = {
+		const flexClassData: FlexFormProps = {
 			date: new Date().toISOString(),
 			title: 'title',
 			description: 'description',
@@ -16,11 +16,11 @@ export const actions = {
 
 		if (imageBlob) {
 			const arr = new Uint8Array(await (imageBlob as Blob).arrayBuffer());
-			FlexClassData.imageUrl =
+			flexClassData.imageUrl =
 				(await postEndpoint(ENDPOINTS.POST.UploadImage, { bytes: arr }, fetch)) ?? '';
 		}
 
-		postEndpoint(ENDPOINTS.POST.Flex.AddFeaturedFlex, FlexClassData, fetch);
+		postEndpoint(ENDPOINTS.POST.Flex.AddFeaturedFlex, flexClassData, fetch);
 		return { success: true };
 	}
 } satisfies Actions;

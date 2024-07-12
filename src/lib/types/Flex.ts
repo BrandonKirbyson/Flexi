@@ -28,14 +28,12 @@ export interface Flex {
 	imageUrl?: string;
 }
 
-export interface FlexFormProps {
+export interface FlexFormProps extends Record<string, string | number | undefined> {
+	date: string;
 	title: string;
 	description: string;
-	room: string;
-	dept: FlexDept;
-	seats: number;
 	name: string;
-	// imageUrl: string;
+	imageUrl?: string;
 }
 
 export enum FlexDept {

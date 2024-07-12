@@ -52,6 +52,9 @@ export async function apiPost<T extends FlattenedEndpoints<'POST'>>(
 	event: RequestEvent,
 	fn: (params: PostEndpointMap[T]['params']) => Promise<[PostEndpointMap[T]['return'], number]>
 ): Promise<Response> {
+	const auth = await verifyAuth(event);
+	if (!auth) return new Response(null, { status: HttpStatusCode.UNAUTHORIZED });
+
 	const params = (await event.request.json()) as PostEndpointMap[T]['params'];
 	const [data, status] = await fn(params);
 	const res = data == null ? null : JSON.stringify(data);
