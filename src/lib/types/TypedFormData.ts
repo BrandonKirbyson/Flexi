@@ -1,12 +1,11 @@
 export type TypedFormDataValue =
-	| FormDataEntryValue
-	| Blob
-	| File
-	| string
-	| number
-	| boolean
-	| null
-	| undefined;
+	// FormDataEntryValue
+	// | Blob
+	// | File
+	string | number;
+// | boolean
+// | null
+// | undefined;
 /**
  * Polyfill for FormData Generic
  *

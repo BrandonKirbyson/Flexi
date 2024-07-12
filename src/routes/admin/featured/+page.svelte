@@ -1,19 +1,20 @@
 <script lang="ts">
-	// const formFields: FlexFormProps = {
-	// 	title: '',
-	// 	description: '',
-	// 	room: '',
-	// 	seats: 0,
-	// 	firstName: '',
-	// 	lastName: ''
-	// };
+	import type { FlexFormProps } from '@/lib/types/Flex';
 
-	let title = '';
-	let description = '';
-	let room = '';
-	let seats = 0;
-	let firstName = '';
-	let lastName = '';
+	const formFields: FlexFormProps = {
+		title: '',
+		description: '',
+		room: '',
+		seats: 0,
+		firstName: string
+	};
+
+	// let title = '';
+	// let description = '';
+	// let room = '';
+	// let seats = 0;
+	// let firstName = '';
+	// let lastName = '';
 </script>
 
 <div>
@@ -40,6 +41,7 @@
 			<input required type="text" bind:value={firstName} />
 			<input required type="text" bind:value={lastName} />
 		</label>
+		<input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" />
 
 		<!-- {#each Object.keys(formFields) as key}
 			<label>

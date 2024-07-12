@@ -80,8 +80,7 @@ export type PostEndpointMap = Implements<
 				date: string;
 				title: string;
 				description: string;
-				firstName: string;
-				lastName: string;
+				name: string;
 			};
 		};
 	}

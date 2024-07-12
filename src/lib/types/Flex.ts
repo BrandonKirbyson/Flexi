@@ -28,11 +28,21 @@ export interface Flex {
 	imageUrl?: string;
 }
 
-export interface FlexFormProps extends Omit<Flex, 'dept' | 'type' | 'teacher' | 'students'> {
-	firstName: string;
-	lastName: string;
+// export interface FlexFormProps extends Omit<Flex, 'dept' | 'type' | 'teacher' | 'students'> {
+// 	firstName: string;
+// 	lastName: string;
 
-	// [key: string]: string | number | undefined;
+// 	// [key: string]: string | number | undefined;
+// }
+
+export interface FlexFormProps {
+	title: string;
+	description: string;
+	room: string;
+	dept: FlexDept;
+	seats: number;
+	name: string;
+	imageUrl: string;
 }
 
 export enum FlexDept {
