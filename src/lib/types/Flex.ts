@@ -33,6 +33,8 @@ export interface FlexFormProps {
 	title: string;
 	description: string;
 	name: string;
+	room: string;
+	seats: number;
 	bytes?: Uint8Array;
 }
 
