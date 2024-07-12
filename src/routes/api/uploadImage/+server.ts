@@ -1,16 +1,16 @@
+import { adminStorage } from '@/lib/firebase/admin';
 import { HttpStatusCode } from '@/lib/types/HttpStatus';
 import { apiPost } from '@/lib/util/api';
 import { ENDPOINTS } from '@/lib/util/endpoints';
 import type { RequestEvent } from '@sveltejs/kit';
-import { getStorage, ref, uploadBytes } from 'firebase/storage';
 
 export async function POST(event: RequestEvent) {
 	return await apiPost<typeof ENDPOINTS.POST.UploadImage>(event, async (params) => {
-		const storage = getStorage();
-		const storageRef = ref(storage, 'some-child');
+		// const storageRef = ref(storage, 'some-child');
 
 		try {
-			const snapshot = await uploadBytes(storageRef, params.file);
+			// Upload the blob
+			adminStorage;
 			console.log('Uploaded a blob or file!', snapshot.ref.fullPath);
 			return [snapshot.ref.fullPath, HttpStatusCode.SUCCESS_CREATED];
 		} catch (e) {

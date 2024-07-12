@@ -1,5 +1,4 @@
 // import type { FlexFormProps } from '@/lib/types/Flex';
-import { ENDPOINTS, postEndpoint } from '@/lib/util/endpoints';
 import type { Actions } from './$types';
 
 export interface FlexFormProps {
@@ -14,9 +13,10 @@ export interface FlexFormProps {
 export const actions = {
 	default: async ({ request }) => {
 		const data = await request.formData();
+		console.log('submit form ', data);
 
-		const image = data.get('image');
-		if (image) console.log('Image', JSON.stringify(image));
+		// const image = data.get('image');
+		// if (image) console.log('Image', JSON.stringify(image));
 		// const description = data.get('description');
 		// const room = data.get('room');
 		// const seats = data.get('seats');
