@@ -1,16 +1,32 @@
+import { adminStorage } from '@/lib/firebase/admin';
 import { HttpStatusCode } from '@/lib/types/HttpStatus';
 import { apiPost } from '@/lib/util/api';
-import { ENDPOINTS, fetchEndpoint } from '@/lib/util/endpoints';
+import { ENDPOINTS } from '@/lib/util/endpoints';
 import type { RequestEvent } from '@sveltejs/kit';
+import dayjs from 'dayjs';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(event: RequestEvent) {
 	return await apiPost<typeof ENDPOINTS.POST.Flex.AddFeaturedFlex>(event, async (params) => {
-		// const date = dayjs(params.date);
-		await Promise.resolve();
-		console.log('Req', params);
+		const date = dayjs(params.date);
 
-		const classes = await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses, {});
-		console.log('classes', classes);
+		let imageURL = '';
+		if (params.bytes) {
+			try {
+				const buffer = Buffer.from(JSON.stringify(params.bytes));
+
+				const filePath = uuidv4();
+				const file = adminStorage.bucket().file(filePath);
+
+				await file.save(buffer, { contentType: 'application/octet-stream' });
+				console.log('RETURNING', file.publicUrl());
+				// return [file.publicUrl(), HttpStatusCode.SUCCESS_CREATED];
+				imageURL = file.publicUrl();
+			} catch (error) {
+				console.error('Error uploading file:', error);
+				return [null, HttpStatusCode.BAD_REQUEST];
+			}
+		}
 
 		// const classesDoc = await flexAdminCollection.doc('classes').get();
 		// const data = classesDoc.data();

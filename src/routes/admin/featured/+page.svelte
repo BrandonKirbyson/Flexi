@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { applyAction, deserialize } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 	import { FlexDept, type FlexFormProps } from '@/lib/types/Flex';
 
-	import type { ActionResult } from '@sveltejs/kit';
+	import { DAY_FORMAT } from '@/lib/util/date';
+	import { ENDPOINTS, postEndpoint } from '@/lib/util/endpoints';
+	import dayjs from 'dayjs';
 	import type { ActionData } from '../$types';
 
 	let imgData: Uint8Array | null = null;
@@ -32,21 +32,28 @@
 
 	async function handleSubmit(event: { currentTarget: EventTarget & HTMLFormElement }) {
 		const data = new FormData(event.currentTarget);
-		if (imgData) data.set('image', new Blob([imgData]));
+		// if (imgData) data.set('image', new Blob([imgData]));
 		const urlTarget = event.currentTarget.action;
 
-		const response = await fetch(urlTarget, {
-			method: 'POST',
-			body: data
+		// if (imgData) {
+		// 	const arr = new Uint8Array(imgData);
+		// 	flexClassData.imageUrl =
+		// 		(await postEndpoint(ENDPOINTS.POST.UploadImage, { bytes: arr })) ?? '';
+		// }
+
+		// const response = await fetch(urlTarget, {
+		// 	method: 'POST',
+		// 	body: data
+		// });
+		const featuredFlex = await postEndpoint(ENDPOINTS.POST.Flex.AddFeaturedFlex, {
+			date: dayjs().format(DAY_FORMAT),
+			title: formFields.title,
+			description: formFields.description,
+			name: formFields.name,
+			bytes: imgData ?? undefined
 		});
 
-		const result: ActionResult = deserialize(await response.text());
-
-		if (result.type === 'success') {
-			await invalidateAll();
-		}
-
-		applyAction(result);
+		console.log('FLEX', featuredFlex);
 	}
 </script>
 

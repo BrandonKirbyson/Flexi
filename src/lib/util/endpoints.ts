@@ -96,8 +96,8 @@ export type EndpointMapType<T extends keyof typeof ENDPOINTS> = {
 	[prop in T extends 'GET' ? X<'GET'> : X<'POST'>]: {
 		return: unknown;
 		params: T extends 'GET'
-			? Record<string, EndpointKey> | EmptyObject
-			: Record<string, EndpointKey>;
+			? Record<string, EndpointKey> | EmptyObject | object
+			: Record<string, EndpointKey> | object;
 	};
 };
 

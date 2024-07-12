@@ -14,13 +14,7 @@ export const actions = {
 			name: 'name'
 		};
 
-		if (imageBlob) {
-			const arr = new Uint8Array(await (imageBlob as Blob).arrayBuffer());
-			flexClassData.imageUrl =
-				(await postEndpoint(ENDPOINTS.POST.UploadImage, { bytes: arr }, fetch)) ?? '';
-		}
-
-		postEndpoint(ENDPOINTS.POST.Flex.AddFeaturedFlex, flexClassData, fetch);
+		postEndpoint(ENDPOINTS.POST.Flex.AddFeaturedFlex, flexClassData);
 		return { success: true };
 	}
 } satisfies Actions;
