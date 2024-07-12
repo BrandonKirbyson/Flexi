@@ -12,7 +12,7 @@ export interface FlexFormProps {
 }
 
 export const actions = {
-	default: async ({ request }) => {
+	default: async ({ request, fetch }) => {
 		const data = await request.formData();
 		const imageURL = data.get('image');
 		if (imageURL) console.log('Image URL', imageURL);
@@ -28,12 +28,16 @@ export const actions = {
 		// 	return new Response('Missing required fields', { status: 400 });
 		// }
 
-		postEndpoint(ENDPOINTS.POST.Flex.AddFeaturedFlex, {
-			date: 'today',
-			title: 'hi',
-			description: 'desc',
-			name: 'Teacher Name'
-		});
+		postEndpoint(
+			ENDPOINTS.POST.Flex.AddFeaturedFlex,
+			{
+				date: 'today',
+				title: 'hi',
+				description: 'desc',
+				name: 'Teacher Name'
+			},
+			fetch
+		);
 		return { success: true };
 	}
 } satisfies Actions;

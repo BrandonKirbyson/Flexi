@@ -112,14 +112,15 @@ export type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = ValueOf<
 
 export async function fetchEndpoint<T extends FlattenedEndpoints<'GET'>>(
 	endpoint: T,
-	params: FetchEndpointMap[T]['params'] = {}
+	params: FetchEndpointMap[T]['params'] = {},
+	fetchFn = fetch
 ): Promise<FetchEndpointMap[T]['return']> {
 	const user = auth?.currentUser;
 	if (!user) {
 		throw new Error('User is not authenticated');
 	}
 	const token = await getIdToken(user);
-	const res = await fetch(
+	const res = await fetchFn(
 		`${endpoint}?${new URLSearchParams(params as Record<string, string>).toString()}`,
 		{
 			method: 'GET',
@@ -143,11 +144,13 @@ export async function fetchEndpoint<T extends FlattenedEndpoints<'GET'>>(
 	}
 }
 
+// fetchFn allows for dependency injection via event.fetch +server.ts files
 export async function postEndpoint<T extends FlattenedEndpoints<'POST'>>(
 	endpoint: T,
-	params: PostEndpointMap[T]['params']
+	params: PostEndpointMap[T]['params'],
+	fetchFn = fetch
 ): Promise<PostEndpointMap[T]['return']> {
-	const res = await fetch(endpoint, {
+	const res = await fetchFn(endpoint, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(params)
