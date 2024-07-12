@@ -1,9 +1,8 @@
 import { getIdToken } from 'firebase/auth';
-import type { UnionToIntersection } from 'firebase/firestore';
 import { auth } from '../firebase/firebase';
 import type { Flex } from '../types/Flex';
 import type { FlexSchedule } from '../types/FlexSchedule';
-import type { Implements } from '../types/Util';
+import type { Implements, ValueOf } from '../types/Util';
 
 export const ENDPOINTS = {
 	GET: {
@@ -11,7 +10,8 @@ export const ENDPOINTS = {
 			GetSchedule: '/api/flex/getSchedule',
 			GetClasses: '/api/flex/getClasses',
 			GetScheduleRange: '/api/flex/getScheduleRange'
-		}
+		},
+		UploadImage: '/api/uploadImage'
 	},
 	POST: {
 		Flex: {
@@ -48,6 +48,12 @@ export type FetchEndpointMap = Implements<
 		[ENDPOINTS.GET.Flex.GetClasses]: {
 			return: Record<string, Flex>;
 			params: EmptyObject;
+		};
+		[ENDPOINTS.GET.UploadImage]: {
+			return: string | null;
+			params: {
+				file: string;
+			};
 		};
 	}
 >;
@@ -87,18 +93,35 @@ export type PostEndpointMap = Implements<
 	}
 >;
 
+type PrimitiveType = string | number | boolean | null | undefined;
+
+// Trying to inline this breaks typescript 💀
+type X<T extends keyof typeof ENDPOINTS> = ValueOf<Flatten<(typeof ENDPOINTS)[T]>>;
 export type EndpointMapType<T extends keyof typeof ENDPOINTS> = {
-	[key in FlattenedEndpoints<T> as string]: {
+	[prop in T extends 'GET' ? X<'GET'> : X<'POST'>]: {
 		return: unknown;
-		params: T extends 'GET' ? Record<string, string> | EmptyObject : Record<string, string>;
+		params: T extends 'GET'
+			? Record<string, PrimitiveType> | EmptyObject
+			: Record<string, PrimitiveType>;
 	};
 };
 
-type Keys<T extends keyof typeof ENDPOINTS> = (typeof ENDPOINTS)[T][keyof (typeof ENDPOINTS)[T]];
+// type Keys<T extends keyof typeof ENDPOINTS> = (typeof ENDPOINTS)[T][keyof (typeof ENDPOINTS)[T]];
 
-export type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = UnionToIntersection<
-	Keys<T>
->[keyof UnionToIntersection<Keys<T>>];
+type Primitive = string | number | boolean;
+type FlattenPairs<T> = {
+	[K in keyof T]: T[K] extends Primitive ? [K, T[K]] : FlattenPairs<T[K]>;
+}[keyof T] &
+	[PropertyKey, Primitive];
+type Flatten<T> = { [P in FlattenPairs<T> as P[0]]: P[1] };
+
+export type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = ValueOf<
+	Flatten<(typeof ENDPOINTS)[T]>
+>;
+// export type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = ValueOf<Flatten<Keys<T>>>;
+// export type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = UnionToIntersection<
+// 	Keys<T>
+// >[keyof UnionToIntersection<Keys<T>>];
 
 export async function fetchEndpoint<T extends FlattenedEndpoints<'GET'>>(
 	endpoint: T,
