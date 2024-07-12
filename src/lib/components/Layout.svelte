@@ -8,7 +8,7 @@
 	<div class="content">
 		<Header />
 		<div class="content-wrapper">
-			<slot name="content"></slot>
+			<slot class="slot" name="content"></slot>
 		</div>
 	</div>
 </div>
@@ -25,6 +25,10 @@
 			&-wrapper {
 				overflow: scroll;
 				height: 100%;
+			}
+
+			:global(.content-wrapper > :first-child) {
+				height: calc(100% - var(--header-height));
 			}
 		}
 

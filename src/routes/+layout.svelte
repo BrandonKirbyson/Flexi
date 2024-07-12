@@ -34,6 +34,8 @@
 		--logo-font: 'Pacifico', cursive;
 		--font: 'Inter', sans-serif;
 
+		--header-height: 4.5rem;
+
 		background-color: var(--bg);
 		color: var(--text);
 		font-family: var(--font);

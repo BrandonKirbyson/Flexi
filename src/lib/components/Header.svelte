@@ -64,7 +64,7 @@
 
 <style lang="scss">
 	.wrapper {
-		height: 4.5rem;
+		height: var(--header-height);
 		width: 100%;
 	}
 
