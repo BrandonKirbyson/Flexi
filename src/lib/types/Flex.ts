@@ -28,13 +28,6 @@ export interface Flex {
 	imageUrl?: string;
 }
 
-// export interface FlexFormProps extends Omit<Flex, 'dept' | 'type' | 'teacher' | 'students'> {
-// 	firstName: string;
-// 	lastName: string;
-
-// 	// [key: string]: string | number | undefined;
-// }
-
 export interface FlexFormProps {
 	title: string;
 	description: string;

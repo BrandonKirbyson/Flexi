@@ -30,16 +30,10 @@
 
 	export let form: ActionData;
 
-	let error: any;
-
 	async function handleSubmit(event: { currentTarget: EventTarget & HTMLFormElement }) {
 		const data = new FormData(event.currentTarget);
 		if (imgData) data.set('image', new Blob([imgData]));
 		const urlTarget = event.currentTarget.action;
-		// if (imgData) {
-		// 	const url = await postEndpoint(ENDPOINTS.POST.UploadImage, { bytes: imgData });
-		// 	data.set('image', url ?? 'ERROR');
-		// }
 
 		const response = await fetch(urlTarget, {
 			method: 'POST',

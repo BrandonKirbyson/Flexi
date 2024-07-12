@@ -7,7 +7,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 export async function GET(event: RequestEvent): Promise<Response> {
 	return await apiFetch<typeof ENDPOINTS.GET.Flex.GetClasses>(event, async () => {
 		const doc = await flexAdminCollection.doc('classes').get();
-		if (!doc.exists) throw new Error('Document not found');
+		if (!doc.exists) return [{}, HttpStatusCode.NOT_FOUND];
 
 		const data = doc.data();
 		if (typeof data === 'undefined') return [{}, HttpStatusCode.NOT_FOUND];
