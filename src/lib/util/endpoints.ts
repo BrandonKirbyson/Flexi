@@ -42,6 +42,7 @@ export type FetchEndpointMap = Implements<
 			params: {
 				startDate: string;
 				endDate: string;
+				limit?: string;
 			};
 		};
 		[ENDPOINTS.GET.Flex.GetClasses]: {

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { Flex } from '@/lib/types/Flex';
 	import type { FlexSchedule } from '@/lib/types/FlexSchedule';
+	import { DAY_FORMAT } from '@/lib/util/date';
 	import { flexScheduleStore } from '@/stores/schedule';
 	import { session } from '@/stores/user';
-	import { type Dayjs } from 'dayjs';
+	import dayjs, { Dayjs } from 'dayjs';
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { ENDPOINTS, fetchEndpoint } from '../../util/endpoints';
@@ -15,7 +16,8 @@
 	let classes: Record<string, Flex> = {};
 	let filtered: string[] = [];
 
-	let schedule: FlexSchedule | null;
+	let schedule: FlexSchedule | null = null;
+	let nextFlex: FlexSchedule | null = null;
 
 	onMount(async () => {
 		classes = await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses);
@@ -23,7 +25,7 @@
 
 	$: date && fetchSchedule();
 
-	function fetchSchedule() {
+	async function fetchSchedule() {
 		schedule = null;
 
 		flexScheduleStore.subscribe((data) => {
@@ -31,12 +33,25 @@
 			if (typeof s === 'undefined') flexScheduleStore.load(date);
 			else schedule = s;
 		});
+
+		nextFlex = (
+			await fetchEndpoint(ENDPOINTS.GET.Flex.GetScheduleRange, {
+				startDate: date.format(DAY_FORMAT),
+				endDate: date.add(1, 'year').format(DAY_FORMAT),
+				limit: '1'
+			})
+		)[0];
 	}
 </script>
 
 <div class="wrapper">
 	{#if schedule == null}
-		<p>No schedule</p>
+		<div class="no-flex">
+			<h1>No flex today!</h1>
+			{#if nextFlex}
+				<h1>Jump to the next flex, {dayjs(nextFlex.date).format(DAY_FORMAT)}</h1>
+			{/if}
+		</div>
 	{:else}
 		<FlexClassSearch bind:filtered {classes} />
 		{#each filtered as id}
@@ -54,5 +69,18 @@
 	.wrapper {
 		overflow: scroll;
 		height: 100%;
+
+		.no-flex {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			height: 100%;
+
+			p {
+				font-size: 1.5rem;
+				color: var(--text-muted);
+			}
+		}
 	}
 </style>

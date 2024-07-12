@@ -1,6 +1,7 @@
 import { scheduleAdminCollection } from '@/lib/firebase/admin';
 import { HttpStatusCode } from '@/lib/types/HttpStatus';
 import { apiFetch } from '@/lib/util/api';
+import { DAY_FORMAT } from '@/lib/util/date';
 import { ENDPOINTS } from '@/lib/util/endpoints';
 import dayjs from 'dayjs';
 import type { RequestEvent } from './$types';
@@ -11,7 +12,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		const snapshot = await scheduleAdminCollection
 			.where('date', '>', startDate)
 			.where('date', '<', endDate)
-			.limit(31)
+			.limit(params.limit ? parseInt(params.limit) : 31)
 			.get();
 
 		if (snapshot.docs.length === 0) return [[], HttpStatusCode.SUCCESS];
@@ -22,6 +23,12 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				classes: doc.data().classes
 			};
 		});
+
+		console.log(
+			params.limit,
+			flexSchedules[0].date.format(DAY_FORMAT),
+			typeof flexSchedules[0].date
+		);
 
 		return [flexSchedules, HttpStatusCode.SUCCESS];
 	});
