@@ -47,7 +47,7 @@
 
 		if (data) {
 			const imageURL = postEndpoint(ENDPOINTS.POST.UploadImage, {
-				file: new Blob([data])
+				bytes: data
 			});
 			console.log('URL ', imageURL);
 		}

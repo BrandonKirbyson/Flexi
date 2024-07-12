@@ -87,13 +87,13 @@ export type PostEndpointMap = Implements<
 		[ENDPOINTS.POST.UploadImage]: {
 			return: string | null;
 			params: {
-				file: Blob;
+				bytes: Uint8Array;
 			};
 		};
 	}
 >;
 
-type EndpointKey = PrimativeOrNull | Blob;
+type EndpointKey = PrimativeOrNull | Blob | Uint8Array | ArrayBuffer | ArrayBufferView;
 
 // Trying to inline this breaks typescript 💀
 type X<T extends keyof typeof ENDPOINTS> = ValueOf<Flatten<(typeof ENDPOINTS)[T]>>;

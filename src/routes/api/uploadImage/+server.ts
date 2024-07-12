@@ -9,14 +9,30 @@ export async function POST(event: RequestEvent) {
 		// const storageRef = ref(storage, 'some-child');
 
 		try {
-			// Upload the blob
-			adminStorage;
-			console.log('Uploaded a blob or file!', snapshot.ref.fullPath);
-			return [snapshot.ref.fullPath, HttpStatusCode.SUCCESS_CREATED];
-		} catch (e) {
-			console.error('Error uploading file', e);
-			return [null, HttpStatusCode.BAD_REQUEST];
+			const buffer = Buffer.from(JSON.stringify(params.bytes));
+			console.log('buffer', buffer);
+
+			const fileName = 'jfoiadjsof';
+			const filePath = fileName;
+
+			const file = adminStorage.bucket().file(filePath);
+
+			console.log('file', file);
+			await file.save(buffer, { contentType: 'application/octet-stream' });
+			console.log(`File ${filePath} uploaded successfully.`);
+		} catch (error) {
+			console.error('Error uploading file:', error);
 		}
+
+		// try {
+		// 	// Upload the blob
+		// 	adminStorage;
+		// 	console.log('Uploaded a blob or file!', snapshot.ref.fullPath);
+		// 	return [snapshot.ref.fullPath, HttpStatusCode.SUCCESS_CREATED];
+		// } catch (e) {
+		// 	console.error('Error uploading file', e);
+		// 	return [null, HttpStatusCode.BAD_REQUEST];
+		// }
 
 		// const date = dayjs(params.file);
 

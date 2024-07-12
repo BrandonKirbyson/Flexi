@@ -27,6 +27,8 @@ const firestore: Firestore = app.firestore();
 export const adminAuth: admin.auth.Auth = app.auth();
 export const adminStorage = app.storage();
 
+async function uploadUint8ArrayToFirebaseStorage(uint8Array: Uint8Array) {}
+
 const createCollection = <T = DocumentData>(collectionName: string) => {
 	return firestore.collection(collectionName) as CollectionReference<T>;
 };
