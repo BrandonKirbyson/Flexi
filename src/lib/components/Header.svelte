@@ -3,7 +3,10 @@
 	import { adminData, session, studentData, teacherData } from '@/stores/user';
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
+	import MdiAdministrator from '~icons/mdi/administrator';
+	import MdiTeacher from '~icons/mdi/teacher';
 	import MdiUserCircle from '~icons/mdi/user-circle';
+	import PhStudent from '~icons/ph/student';
 	import type { Name } from '../types/User';
 	import { UserType } from '../types/UserType';
 	import { ENDPOINTS, postEndpoint } from '../util/endpoints';
@@ -87,7 +90,17 @@
 			{#if name}
 				<span>{formatName(name)}</span>
 			{/if}
-			<button on:click={switchUserType}> {$session.userType} </button>
+			<button on:click={switchUserType}>
+				{#if $session.userType}
+					{#if $session.userType === UserType.Student}
+						<PhStudent />
+					{:else if $session.userType === UserType.Teacher}
+						<MdiTeacher />
+					{:else if $session.userType === UserType.Admin}
+						<MdiAdministrator />
+					{/if}
+				{/if}
+			</button>
 		</div>
 	</div>
 </div>
