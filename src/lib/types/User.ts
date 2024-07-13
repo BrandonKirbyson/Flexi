@@ -17,6 +17,7 @@ export interface Name {
 
 export interface SessionState {
 	uid: string | null;
+	email: string | null;
 	loading: boolean;
 	userType?: UserType;
 }

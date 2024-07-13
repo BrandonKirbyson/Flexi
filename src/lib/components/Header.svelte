@@ -2,22 +2,45 @@
 	import { page } from '$app/stores';
 	import { adminData, session, studentData, teacherData } from '@/stores/user';
 	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 	import MdiUserCircle from '~icons/mdi/user-circle';
 	import type { Name } from '../types/User';
 	import { UserType } from '../types/UserType';
+	import { ENDPOINTS, postEndpoint } from '../util/endpoints';
 	import { formatName } from '../util/name';
 	import ScheduleHeader from './schedule/ScheduleHeader.svelte';
 
-	$: title = !datePicker
-		? $page.url.pathname.split('/').pop() || 'Home'
-		: $page.url.pathname.split('/').slice(-2, -1).pop() || 'Home';
 	$: datePicker = hasDatePicker($page.url.pathname);
 
 	let name: Name;
 
+	// $: title = $page.url.pathname.split('/')[2] || 'Home';
+	$: title = !datePicker
+		? $page.url.pathname.split('/').pop() ?? 'Home'
+		: $page.url.pathname.split('/').slice(-2, -1).pop() ?? 'Home';
 	function hasDatePicker(path: string) {
 		const regex = /\d{4}-\d{2}-\d{2}$/;
 		return regex.test(path.split('/').pop() || '');
+	}
+
+	async function switchUserType() {
+		const email = get(session).email;
+		if (!email) return;
+
+		const currentType = get(session).userType;
+		if (currentType === UserType.Student) {
+			await postEndpoint(ENDPOINTS.POST.SetUserType, {
+				type: UserType.Admin,
+				email: email
+			});
+		} else {
+			await postEndpoint(ENDPOINTS.POST.SetUserType, {
+				type: UserType.Student,
+				email: email
+			});
+		}
+
+		location.reload();
 	}
 
 	onMount(() => {
@@ -26,6 +49,7 @@
 				case UserType.Student:
 					studentData.subscribe((data) => {
 						if (!data) return;
+						name = data.name;
 					});
 					break;
 				case UserType.Teacher:
@@ -58,6 +82,7 @@
 			{#if name}
 				<span>{formatName(name)}</span>
 			{/if}
+			<button on:click={switchUserType}> {$session.userType} </button>
 		</div>
 	</div>
 </div>

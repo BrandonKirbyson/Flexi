@@ -13,6 +13,7 @@ export function initAuth(auth: Auth) {
 		if (user) {
 			session.set({
 				uid: user.uid,
+				email: user.email,
 				loading: false
 			});
 
@@ -20,6 +21,7 @@ export function initAuth(auth: Auth) {
 		} else {
 			session.set({
 				uid: null,
+				email: null,
 				loading: false
 			});
 		}

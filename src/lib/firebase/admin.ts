@@ -33,5 +33,6 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 
 export const flexAdminCollection = createCollection<FlexDocument>('flex');
 export const scheduleAdminCollection = createCollection<FlexScheduleDocument>('schedule');
+export const userAdminCollection = createCollection('users');
 export const teachersColAdmin = createCollection<Flex>('teachers');
 export const schoolDataColAdmin = createCollection<SchoolData>('school');

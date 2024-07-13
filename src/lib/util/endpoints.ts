@@ -2,6 +2,7 @@ import { getIdToken } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import type { Flex, FlexClasses, FlexFormProps, FlexType } from '../types/Flex';
 import type { FlexSchedule } from '../types/FlexSchedule';
+import type { UserType } from '../types/UserType';
 import type { Flatten, Implements, PrimativeOrNull, ValueOf } from '../types/Util';
 
 export const ENDPOINTS = {
@@ -20,7 +21,8 @@ export const ENDPOINTS = {
 			ScheduleStudent: '/api/flex/scheduleStudent',
 			AddFeaturedFlex: '/api/flex/addFeaturedFlex'
 		},
-		UploadImage: '/api/uploadImage'
+		UploadImage: '/api/uploadImage',
+		SetUserType: '/api/setUserType'
 	}
 } as const;
 
@@ -88,6 +90,13 @@ export type PostEndpointMap = Implements<
 			return: string | null;
 			params: {
 				bytes: Uint8Array;
+			};
+		};
+		[ENDPOINTS.POST.SetUserType]: {
+			return: null;
+			params: {
+				type: UserType;
+				email: string;
 			};
 		};
 	}

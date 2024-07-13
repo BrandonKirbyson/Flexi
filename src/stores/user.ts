@@ -6,6 +6,7 @@ import type { SessionState } from '../lib/types/User';
 
 export const session = writable<SessionState>({
 	uid: null,
+	email: null,
 	loading: true
 });
 
