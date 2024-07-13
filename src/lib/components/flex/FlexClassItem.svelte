@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Flex } from '@/lib/types/Flex';
+	import type { Flex, FlexType } from '@/lib/types/Flex';
 	import { DAY_FORMAT } from '@/lib/util/date';
 	import { ENDPOINTS, postEndpoint } from '@/lib/util/endpoints';
 	import { formatName } from '@/lib/util/name';
@@ -7,10 +7,11 @@
 	import type { Dayjs } from 'dayjs';
 	import { get } from 'svelte/store';
 
-	export let flex: Flex;
+	export let flex: Flex<FlexType.Class> | Flex<FlexType.Featured>;
 	export let id: string;
 	export let date: Dayjs;
-	export let scheduled: boolean = false;
+	export let scheduled = false;
+	export let featured = false;
 
 	function schedule() {
 		const studentId = get(session).uid;
@@ -26,7 +27,10 @@
 <div class="grid-item">
 	<span class="title">{flex.title}</span>
 	<span class="teacher">{formatName(flex.teacher)}</span>
-	<span class="dept">{flex.dept}</span>
+	{#if !featured}
+		<span class="dept">{flex.dept}</span>
+	{/if}
+
 	<span class="room">{flex.room}</span>
 	<span class="seats">{flex.seats}</span>
 	<button on:click={schedule} class:disabled={scheduled}>Schedule</button>

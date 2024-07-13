@@ -1,7 +1,7 @@
 import type { Name } from './User';
 
 export interface FlexDocument {
-	classes: Record<string, Flex>;
+	classes: Record<string, Flex | Flex<FlexType.Featured>>;
 }
 
 export enum FlexType {
@@ -16,16 +16,19 @@ export interface FlexFilter {
 	zero?: boolean;
 }
 
-export interface Flex {
+export interface Flex<T extends FlexType = FlexType.Class> {
 	type: FlexType;
 	title: string;
-	description?: string;
 	room: string;
 	dept: FlexDept;
 	seats: number;
 	teacher: Name;
 	students: Record<string, string[] | undefined>;
-	imageUrl?: string;
+
+	// Featured flex only
+	description: T extends FlexType.Featured ? string : never;
+	date: T extends FlexType.Featured ? string : never;
+	imageUrl: T extends FlexType.Featured ? string : never;
 }
 
 export interface FlexFormProps {

@@ -9,10 +9,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(event: RequestEvent) {
 	return await apiPost<typeof ENDPOINTS.POST.Flex.AddFeaturedFlex>(event, async (params) => {
-		const obj: Flex = {
+		const obj: Flex<FlexType.Featured> = {
 			type: FlexType.Featured,
 			title: params.title,
 			description: params.description,
+			date: params.date,
 			room: params.room,
 			dept: FlexDept.Feature,
 			seats: params.seats,

@@ -1,6 +1,6 @@
 import { getIdToken } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
-import type { Flex, FlexDept, FlexFormProps, FlexType } from '../types/Flex';
+import type { Flex, FlexFormProps, FlexType } from '../types/Flex';
 import type { FlexSchedule } from '../types/FlexSchedule';
 import type { Flatten, Implements, PrimativeOrNull, ValueOf } from '../types/Util';
 
@@ -46,7 +46,7 @@ export type FetchEndpointMap = Implements<
 			};
 		};
 		[ENDPOINTS.GET.Flex.GetClasses]: {
-			return: Record<string, Flex>;
+			return: Record<string, Flex<FlexType.Featured> | Flex>;
 			params: {
 				type?: FlexType;
 			};
