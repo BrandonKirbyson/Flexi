@@ -25,7 +25,7 @@ export function uploadClassData() {
 
 	const flexes: Record<string, Flex> = {};
 
-	for (const course of classes.courses) {
+	for (const course of classes.courses.slice(0, 5)) {
 		const uid = doc(collection(db, 'flex')).id;
 		flexes[uid] = {
 			type: FlexType.Class,

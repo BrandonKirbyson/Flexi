@@ -50,6 +50,8 @@
 			title: formFields.title,
 			description: formFields.description,
 			name: formFields.name,
+			seats: formFields.seats,
+			room: formFields.room,
 			bytes: imgData ?? undefined
 		});
 

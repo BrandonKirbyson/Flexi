@@ -1,6 +1,7 @@
 import type { Name } from '../types/User';
 
 export function format(name: string): string {
+	if (!name) return '';
 	return name.charAt(0).toUpperCase() + name.slice(1).toLocaleLowerCase();
 }
 
