@@ -5,7 +5,7 @@
 	export let title: string;
 	export let icon: ComponentType;
 
-	$: active = $page.url.pathname.split('/').pop() === title.toLowerCase();
+	$: active = $page.url.pathname.split('/')[2] === title.toLowerCase();
 	$: href = `/${$page.url.pathname.split('/')[1]}/${title.toLowerCase()}`;
 </script>
 
