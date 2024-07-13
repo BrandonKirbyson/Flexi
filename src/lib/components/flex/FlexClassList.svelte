@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Flex } from '@/lib/types/Flex';
+	import type { FlexClasses } from '@/lib/types/Flex';
 	import type { FlexSchedule } from '@/lib/types/FlexSchedule';
 	import { DAY_FORMAT } from '@/lib/util/date';
 	import { flexScheduleStore } from '@/stores/schedule';
@@ -13,7 +13,7 @@
 
 	export let date: Dayjs;
 
-	let classes: Record<string, Flex> = {};
+	let classes: FlexClasses = {};
 	let filtered: string[] = [];
 
 	let schedule: FlexSchedule | null = null;

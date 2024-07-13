@@ -9,6 +9,8 @@ export enum FlexType {
 	Featured = 'featured'
 }
 
+export type FlexClasses = Record<string, Flex | Flex<FlexType.Featured>>;
+
 export interface FlexFilter {
 	search?: string;
 	dept?: FlexDept[];
@@ -16,7 +18,11 @@ export interface FlexFilter {
 	zero?: boolean;
 }
 
-export interface Flex<T extends FlexType = FlexType.Class> {
+export type MandateProps<T, K extends keyof T> = Omit<T, K> & {
+	[MK in K]-?: NonNullable<T[MK]>;
+};
+
+interface FlexBase {
 	type: FlexType;
 	title: string;
 	room: string;
@@ -24,12 +30,30 @@ export interface Flex<T extends FlexType = FlexType.Class> {
 	seats: number;
 	teacher: Name;
 	students: Record<string, string[] | undefined>;
-
-	// Featured flex only
-	description: T extends FlexType.Featured ? string : never;
-	date: T extends FlexType.Featured ? string : never;
-	imageUrl: T extends FlexType.Featured ? string : never;
 }
+
+export type Flex<T extends FlexType = FlexType.Class> = T extends FlexType.Featured
+	? FlexBase & {
+			description?: T extends FlexType.Featured ? string : never;
+			date?: T extends FlexType.Featured ? string : never;
+			imageUrl?: T extends FlexType.Featured ? string : never;
+		}
+	: FlexBase;
+
+// export interface Flex<T extends FlexType = FlexType.Class> {
+// 	type: FlexType;
+// 	title: string;
+// 	room: string;
+// 	dept: FlexDept;
+// 	seats: number;
+// 	teacher: Name;
+// 	students: Record<string, string[] | undefined>;
+
+// 	// Featured flex only
+// 	description?: T extends FlexType.Featured ? string : never;
+// 	date?: T extends FlexType.Featured ? string : never;
+// 	imageUrl?: T extends FlexType.Featured ? string : never;
+// }
 
 export interface FlexFormProps {
 	date: string;

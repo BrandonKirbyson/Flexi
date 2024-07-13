@@ -8,9 +8,7 @@
 	let classes: Record<string, Flex<FlexType.Featured>> = {};
 
 	onMount(async () => {
-		classes = (await fetchEndpoint(ENDPOINTS.GET.Flex.GetClasses, {
-			type: FlexType.Featured
-		})) as Record<string, Flex<FlexType.Featured>>;
+		classes = await fetchEndpoint(ENDPOINTS.GET.Flex.GetFeaturedFlexes);
 	});
 </script>
 

@@ -1,6 +1,6 @@
 import { getIdToken } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
-import type { Flex, FlexFormProps, FlexType } from '../types/Flex';
+import type { Flex, FlexClasses, FlexFormProps, FlexType } from '../types/Flex';
 import type { FlexSchedule } from '../types/FlexSchedule';
 import type { Flatten, Implements, PrimativeOrNull, ValueOf } from '../types/Util';
 
@@ -9,6 +9,7 @@ export const ENDPOINTS = {
 		Flex: {
 			GetSchedule: '/api/flex/getSchedule',
 			GetClasses: '/api/flex/getClasses',
+			GetFeaturedFlexes: '/api/flex/getFeaturedFlexes',
 			GetScheduleRange: '/api/flex/getScheduleRange'
 		}
 	},
@@ -46,10 +47,12 @@ export type FetchEndpointMap = Implements<
 			};
 		};
 		[ENDPOINTS.GET.Flex.GetClasses]: {
-			return: Record<string, Flex<FlexType.Featured> | Flex>;
-			params: {
-				type?: FlexType;
-			};
+			return: FlexClasses;
+			params: EmptyObject;
+		};
+		[ENDPOINTS.GET.Flex.GetFeaturedFlexes]: {
+			return: Record<string, Flex<FlexType.Featured>>;
+			params: EmptyObject;
 		};
 	}
 >;

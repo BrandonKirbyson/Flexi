@@ -1,4 +1,5 @@
 import { flexAdminCollection } from '@/lib/firebase/admin';
+import { FlexType } from '@/lib/types/Flex';
 import { HttpStatusCode } from '@/lib/types/HttpStatus';
 import { apiFetch } from '@/lib/util/api';
 import { ENDPOINTS } from '@/lib/util/endpoints';
@@ -12,6 +13,11 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		const data = doc.data();
 		if (typeof data === 'undefined') return [{}, HttpStatusCode.NOT_FOUND];
 		const classes = data.classes;
-		return [classes, HttpStatusCode.SUCCESS];
+		return [
+			Object.fromEntries(
+				Object.entries(classes).filter(([_, value]) => value.type === FlexType.Featured)
+			),
+			HttpStatusCode.SUCCESS
+		];
 	});
 }
