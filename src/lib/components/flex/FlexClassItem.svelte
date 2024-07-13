@@ -24,7 +24,7 @@
 	}
 </script>
 
-<div class="grid-item">
+<div class="grid-item" style="grid-template-columns: repeat({featured ? 5 : 6}, minmax(0, 1fr))">
 	<span class="title">{flex.title}</span>
 	<span class="teacher">{formatName(flex.teacher)}</span>
 	{#if !featured}
@@ -39,7 +39,6 @@
 <style lang="scss">
 	.grid-item {
 		display: grid;
-		grid-template-columns: repeat(6, minmax(0, 1fr));
 		grid-template-rows: 1fr;
 		width: 100%;
 
