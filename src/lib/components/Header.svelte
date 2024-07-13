@@ -23,22 +23,27 @@
 		return regex.test(path.split('/').pop() || '');
 	}
 
-	async function switchUserType() {
-		const email = get(session).email;
-		if (!email) return;
-
-		const currentType = get(session).userType;
-		if (currentType === UserType.Student) {
-			await postEndpoint(ENDPOINTS.POST.SetUserType, {
-				type: UserType.Admin,
-				email: email
-			});
-		} else {
-			await postEndpoint(ENDPOINTS.POST.SetUserType, {
-				type: UserType.Student,
-				email: email
-			});
+	function nextRole(currentType: UserType) {
+		switch (currentType) {
+			case UserType.Student:
+				return UserType.Teacher;
+			case UserType.Teacher:
+				return UserType.Admin;
+			case UserType.Admin:
+				return UserType.Student;
 		}
+	}
+
+	async function switchUserType() {
+		const { email, userType } = get(session);
+
+		if (!email) return;
+		if (!userType) return;
+
+		await postEndpoint(ENDPOINTS.POST.SetUserType, {
+			type: nextRole(userType),
+			email: email
+		});
 
 		location.reload();
 	}
