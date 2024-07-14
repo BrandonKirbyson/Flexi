@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Flex, FlexType } from '@/lib/types/Flex';
+	import { isFeaturedFlex } from '@/lib/types/typeguards';
 	import { DAY_FORMAT } from '@/lib/util/date';
 	import { ENDPOINTS, postEndpoint } from '@/lib/util/endpoints';
 	import { formatName } from '@/lib/util/name';
@@ -7,7 +8,7 @@
 	import type { Dayjs } from 'dayjs';
 	import { get } from 'svelte/store';
 
-	export let flex: Flex<FlexType.Class> | Flex<FlexType.Featured>;
+	export let flex: Flex | Flex<FlexType.Featured>;
 	export let id: string;
 	export let date: Dayjs;
 	export let scheduled = false;
@@ -29,6 +30,9 @@
 	<span class="teacher">{formatName(flex.teacher)}</span>
 	{#if !featured}
 		<span class="dept">{flex.dept}</span>
+	{/if}
+	{#if featured && isFeaturedFlex(flex) && flex.imageUrl}
+		<img src={flex.imageUrl} alt={flex.title} />
 	{/if}
 
 	<span class="room">{flex.room}</span>

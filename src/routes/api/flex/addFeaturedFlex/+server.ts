@@ -37,7 +37,14 @@ export async function POST(event: RequestEvent) {
 
 				await file.save(buffer, { contentType: 'application/octet-stream' });
 				// return [file.publicUrl(), HttpStatusCode.SUCCESS_CREATED];
-				obj.imageUrl = file.publicUrl();
+				// obj.imageUrl = file.publicUrl();
+				// file.getSignedUrl(
+				// 	{ action: 'read', expires: Date.now() + 1000 * 60 * 60 * 24 * 7 },
+				// 	(err, url) => {}
+				// );
+				await file.makePublic();
+				obj.imageUrl = `https://storage.googleapis.com/${file.bucket.name}/${file.name}`;
+
 				classes[uid] = obj;
 				flexAdminCollection.doc('classes').set({
 					classes

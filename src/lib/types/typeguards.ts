@@ -40,6 +40,12 @@ export function isFlexClass(value: unknown): value is Flex {
 	return isType(dummyFlexClass, value);
 }
 
+export const isFeaturedFlex = (
+	flex: Flex | Flex<FlexType.Featured>
+): flex is Flex<FlexType.Featured> => {
+	return flex.type === FlexType.Featured;
+};
+
 // export function validUserStore(
 // 	user: Writable<StudentOrTeacher | null>
 // ): user is Writable<StudentOrTeacher> {
