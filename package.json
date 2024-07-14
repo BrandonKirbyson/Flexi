@@ -25,6 +25,7 @@
 		"@types/eslint__js": "^8.42.3",
 		"@types/uuid": "^10.0.0",
 		"date-picker-svelte": "^2.13.0",
+		"drizzle-kit": "^0.23.0",
 		"eslint": "^9.6.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.41.0",
@@ -44,12 +45,16 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@supabase/ssr": "^0.4.0",
+		"@supabase/supabase-js": "^2.44.3",
 		"@sveltejs/vite-plugin-svelte": "^3.1.1",
 		"@types/jsonwebtoken": "^9.0.6",
 		"dayjs": "^1.11.11",
+		"drizzle-orm": "^0.32.0",
 		"firebase": "^10.12.3",
 		"firebase-admin": "^12.2.0",
 		"jsonwebtoken": "^9.0.2",
+		"postgres": "^3.4.4",
 		"uuid": "^10.0.0"
 	}
 }
