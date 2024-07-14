@@ -6,6 +6,7 @@
 	import MdiGear from 'virtual:icons/mdi/gear';
 	import MdiHome from 'virtual:icons/mdi/home';
 	import MdiStar from 'virtual:icons/mdi/star';
+	import IconParkOutlineList from '~icons/icon-park-outline/list';
 </script>
 
 {#if $session.loading}
@@ -14,6 +15,7 @@
 	<Layout>
 		<Sidebar slot="sidebar">
 			<Tab title="Dashboard" icon={MdiHome} />
+			<Tab title="Attendance" icon={IconParkOutlineList} />
 			<Tab title="Flex" icon={MdiStar} />
 			<Tab title="Settings" icon={MdiGear} />
 		</Sidebar>
