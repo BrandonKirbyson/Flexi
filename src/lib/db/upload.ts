@@ -1,9 +1,9 @@
 import type { Name } from '@/lib/types/User';
 import classes from '../assets/schoolData/classes.json';
 import teacherRooms from '../assets/schoolData/teacherRooms.json';
-import { type Flex, type FlexDocument } from '../types/Flex';
+import { FlexType, deptNameToEnum } from '../types/Flex';
 import { db } from './index';
-import { testTable } from './schema';
+import { flexTable } from './schema';
 
 function getCourseRoom(name: Name) {
 	const arr = Object.entries(teacherRooms);
@@ -16,42 +16,22 @@ function getCourseRoom(name: Name) {
 	}) || ['', 'Unknown'])[1].trim();
 }
 
-export async function uploadClassData() {
-	const a = await db.select().from(testTable);
-	console.log('DATA', a);
-	// if (!db) throw new Error('Firestore not initialized');
-
-	const flexes: Record<string, Flex> = {};
-
+export function uploadClassData() {
 	for (const course of classes.courses.slice(0, 5)) {
-		db.insert(testTable)
+		// const uid = doc(collection(db, 'flex')).id;
+		db.insert(flexTable)
 			.values({
-				name: course.courseNameOriginal
+				type: String(FlexType.Class),
+				title: course.courseNameOriginal,
+				dept: String(deptNameToEnum(course.departmentName)),
+				room: getCourseRoom({ first: course.stafferFirstName, last: course.stafferLastName }),
+				// teacher: formatNameToName({ first: course.stafferFirstName, last: course.stafferLastName }),
+				teacherFirstName: course.stafferFirstName,
+				teacherLastName: course.stafferLastName,
+				seats: course.maxNumberStudents
 			})
 			.execute();
-		console.log('inserted');
-		// const uid = doc(collection(db, 'flex')).id;
-		// db.insert(flexTable).values({
-		// 	// id: 'udiaojsa',
-		// 	type: FlexType.Class,
-		// 	title: course.courseNameOriginal,
-		// 	dept: deptNameToEnum(course.departmentName),
-		// 	// room: course.courseRoom,
-		// 	room: getCourseRoom({ first: course.stafferFirstName, last: course.stafferLastName }),
-		// 	teacher: formatNameToName({ first: course.stafferFirstName, last: course.stafferLastName }),
-		// 	seats: course.maxNumberStudents,
-		// 	students: {
-		// 		[dayjs().format(DAY_FORMAT)]: []
-		// 	}
-		// });
 	}
-
-	const flex: FlexDocument = {
-		classes: flexes
-	};
-
-	// const ref = doc(collection(db, 'flex'), 'classes');
-	// setDoc(ref, flex);
 }
 
 // export function uploadUserData() {
