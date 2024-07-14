@@ -76,7 +76,7 @@ export enum FlexDept {
 	Language = 'Language',
 	PE = 'PE',
 	Other = 'Other',
-	Feature = 'Feature'
+	Feature = 'Featured'
 }
 
 export function deptNameToEnum(deptName: string): FlexDept {

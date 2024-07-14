@@ -18,14 +18,12 @@ function getCourseRoom(name: Name) {
 
 export function uploadClassData() {
 	for (const course of classes.courses.slice(0, 5)) {
-		// const uid = doc(collection(db, 'flex')).id;
 		db.insert(flexTable)
 			.values({
-				type: String(FlexType.Class),
+				type: FlexType.Class,
 				title: course.courseNameOriginal,
-				dept: String(deptNameToEnum(course.departmentName)),
+				dept: deptNameToEnum(course.departmentName),
 				room: getCourseRoom({ first: course.stafferFirstName, last: course.stafferLastName }),
-				// teacher: formatNameToName({ first: course.stafferFirstName, last: course.stafferLastName }),
 				teacherFirstName: course.stafferFirstName,
 				teacherLastName: course.stafferLastName,
 				seats: course.maxNumberStudents
