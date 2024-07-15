@@ -8,9 +8,9 @@
 	import MdiStar from 'virtual:icons/mdi/star';
 </script>
 
-{#if $session.loading}
-	loadSvelteConfig...
-{:else}
+<!--{#if $session.loading}-->
+<!--	loadSvelteConfig...-->
+<!--{:else}-->
 	<Layout>
 		<Sidebar slot="sidebar">
 			<Tab title="Dashboard" icon={MdiHome} />
@@ -29,4 +29,4 @@
 			height: 100%;
 		}
 	</style>
-{/if}
+<!--{/if}-->

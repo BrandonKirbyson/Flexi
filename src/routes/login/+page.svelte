@@ -19,17 +19,21 @@
 
 <div class="login-form">
 	<h1>Login</h1>
-	<form method="POST" action="/login">
-		<!-- <label>
-			Email
-			<input name="email" type="email" />
-		</label>
-		<label>
-			Password
-			<input name="password" type="password" />
-		</label>
-		<button>Login</button>
-		<button formaction="?/signup">Sign up</button> -->
-		<button type="submit">Login with Google</button>
-	</form>
+<!--	<form method="POST" action="/login">-->
+<!--		&lt;!&ndash; <label>-->
+<!--			Email-->
+<!--			<input name="email" type="email" />-->
+<!--		</label>-->
+<!--		<label>-->
+<!--			Password-->
+<!--			<input name="password" type="password" />-->
+<!--		</label>-->
+<!--		<button>Login</button>-->
+<!--		<button formaction="?/signup">Sign up</button> &ndash;&gt;-->
+<!--		<button type="submit">Login with Google</button>-->
+<!--	</form>-->
+
+	<a href="/auth/google">
+		Login with google
+	</a>
 </div>

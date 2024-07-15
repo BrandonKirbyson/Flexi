@@ -3,7 +3,9 @@
 	export let data: LayoutData;
 </script>
 
-<slot></slot>
+<!--{JSON.stringify(data)}-->
+<slot>
+</slot>
 
 <style lang="scss">
 	@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');

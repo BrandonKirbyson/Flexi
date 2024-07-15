@@ -20,6 +20,7 @@ export const handle: Handle = ({ event, resolve }) => {
 						event.cookies.set(name, value, { ...options, path: '/' });
 					});
 				} catch {
+					console.error('Failed to set cookies');
 					// The `setAll` method was called from a Server Component.
 					// This can be ignored if you have middleware refreshing
 					// user sessions.
@@ -37,6 +38,7 @@ export const handle: Handle = ({ event, resolve }) => {
 		const {
 			data: { session }
 		} = await event.locals.supabase.auth.getSession();
+		console.log("GET SESSION", session)
 		if (!session) {
 			return { session: null, user: null };
 		}

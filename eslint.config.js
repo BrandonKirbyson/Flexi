@@ -42,6 +42,6 @@ export default tseslint.config(
 		...tseslint.configs.disableTypeChecked
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'dist/', 'playwright.config.ts']
+		ignores: ['build/', '.svelte-kit/', 'dist/', '*.config.ts']
 	}
 );

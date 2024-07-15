@@ -3,11 +3,11 @@
 	import { signOut } from 'firebase/auth';
 
 	async function logout() {
-		try {
-			await signOut(auth);
-		} catch (error) {
-			console.error(error);
-		}
+		// try {
+		// 	await signOut(auth);
+		// } catch (error) {
+		// 	console.error(error);
+		// }
 	}
 </script>
 
