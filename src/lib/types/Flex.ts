@@ -22,14 +22,13 @@ export type MandateProps<T, K extends keyof T> = Omit<T, K> & {
 	[MK in K]-?: NonNullable<T[MK]>;
 };
 
-interface FlexBase {
+export interface FlexBase {
 	type: FlexType;
 	title: string;
 	room: string;
 	dept: FlexDept;
 	seats: number;
 	teacher: Name;
-	students: Record<string, string[] | undefined>;
 }
 
 export type Flex<T extends FlexType = FlexType.Class> = T extends FlexType.Featured
