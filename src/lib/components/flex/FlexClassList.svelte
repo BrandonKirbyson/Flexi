@@ -2,7 +2,6 @@
 	import type { FlexClasses } from '@/lib/types/Flex';
 	import type { FlexSchedule } from '@/lib/types/FlexSchedule';
 	import { DAY_FORMAT } from '@/lib/util/date';
-	import { flexScheduleStore } from '@/stores/schedule';
 	import { session } from '@/stores/user';
 	import dayjs, { type Dayjs } from 'dayjs';
 	import { onMount } from 'svelte';
@@ -29,24 +28,24 @@
 	async function fetchSchedule() {
 		schedule = null;
 
-		flexScheduleStore.subscribe((data) => {
-			const s = data.get(date);
-			if (typeof s === 'undefined') flexScheduleStore.load(date);
-			else schedule = s;
-		});
+		// flexScheduleStore.subscribe((data) => {
+		// 	const s = data.get(date);
+		// 	if (typeof s === 'undefined') flexScheduleStore.load(date);
+		// 	else schedule = s;
+		// });
 
-		nextFlex = (
-			await fetchEndpoint(ENDPOINTS.GET.Flex.GetScheduleRange, {
-				startDate: date.format(DAY_FORMAT),
-				endDate: date.add(1, 'year').format(DAY_FORMAT),
-				limit: '1'
-			})
-		)[0];
+		// nextFlex = (
+		// 	await fetchEndpoint(ENDPOINTS.GET.Flex.GetScheduleRange, {
+		// 		startDate: date.format(DAY_FORMAT),
+		// 		endDate: date.add(1, 'year').format(DAY_FORMAT),
+		// 		limit: '1'
+		// 	})
+		// )[0];
 	}
 </script>
 
 <div class="wrapper">
-	{#if schedule == null}
+	{#if schedule !== null}
 		<div class="no-flex">
 			<h1>No flex today!</h1>
 			{#if nextFlex && nextFlexDate}

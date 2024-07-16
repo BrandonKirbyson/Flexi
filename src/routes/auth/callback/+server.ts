@@ -9,7 +9,7 @@ export const GET = async (event: RequestEvent) => {
 	const next = url.searchParams.get('next') ?? '/';
 
 	if (code) {
-		const { error } = await supabase.auth.exchangeCodeForSession(code)
+		const { error } = await supabase.auth.exchangeCodeForSession(code);
 		if (!error) {
 			redirect(303, `/${next.slice(1)}`);
 		}
