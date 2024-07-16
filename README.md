@@ -1,38 +1,51 @@
-# create-svelte
+# Flexi
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Flexi is an app designed for a school to manage flex periods and share opportunities with students. It aims to make the process of signing up for flex classes easier for both students and teachers, removing the unnecessary and incredibly time-consuming process currently associated with the outdated system. It also allows for school-wide announcements and featured flex opportunities to be shared with students without requiring each teacher to be responsible for disseminating the information.
 
-## Creating a project
+## What is Flex?
 
-If you're seeing this, you've probably already done this step. Congrats!
+Flex is a period of time during the school day when students can choose what class or featured flex they would like to attend. Flex is a time for students to get help from teachers, work on homework, or attend a special opportunity.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Why Flexi?
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+The other flex-scheduling app, Enriching Students, is outdated and not user-friendly. It is difficult to use, lacks features, and has numerous bugs. Flexi aims to fix these issues and provide a better experience for students, teachers, and school administrators. Flexi has a modern design and many ease-of-use features that make flex less of a time-consuming burden for everyone involved, allowing students to waste less time. Additionally, Flexi is free, unlike the estimated cost of Enriching Students, which is $150,000 for our school.
 
-## Developing
+## Features
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Flexi has many features for students, teachers, and school administrators. Below are some of the features that Flexi offers, with more to be added as the app is developed.
 
-```bash
-npm run dev
+### Students
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+- View and sign up for flex classes
+- Set default flex classes
+- See when test retakes are available
+- Request classes with a comment to the teacher
+- View and sign up for featured flex opportunities
+- See school announcements, including upcoming events and opportunities (non-flex)
 
-## Building
+### Teachers
 
-To create a production version of your app:
+- Create and manage their flex classes
+- View students who have signed up for their class
+- Change settings for each flex day
+- Specify what students are allowed (e.g., only students in their class, any students)
+- Specify a flex to be for retakes only
 
-```bash
-npm run build
-```
+### Admin
 
-You can preview the production build with `npm run preview`.
+- Create and manage featured flex opportunities
+- Create and manage school announcements
+- Create and manage flex days (schedule)
+- Reassign students to a different flex class, or in bulk to a locked flex (for assemblies)
+- View and manage all flex classes
+- Upload flex and student data
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Development
+
+Flexi is currently in development. The app is being built using SvelteKit, TypeScript, Supabase, and a custom API to secure student data. The app will be available for web, and if time allows, a mobile app for students may be built to allow important notifications and an easier scheduling process.
+
+<p align="center">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=svelte,typescript,supabase" height="60"/>
+  </a>
+</p>
