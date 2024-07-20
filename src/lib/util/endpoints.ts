@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { getIdToken } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import type { Flex, FlexClasses, FlexFormProps, FlexType } from '../types/Flex';
@@ -121,20 +122,22 @@ export type FlattenedEndpoints<T extends keyof typeof ENDPOINTS> = ValueOf<
 
 export async function fetchEndpoint<T extends FlattenedEndpoints<'GET'>>(
 	endpoint: T,
+	supabase?: SupabaseClient,
 	params: FetchEndpointMap[T]['params'] = {},
 	fetchFn = fetch
 ): Promise<FetchEndpointMap[T]['return']> {
-	const user = auth?.currentUser;
-	if (!user) {
-		throw new Error('User is not authenticated');
-	}
-	const token = await getIdToken(user);
+	console.log(supabase?.auth);
+	// const user = auth?.currentUser;
+	// if (!user) {
+	// throw new Error('User is not authenticated');
+	// }
+	// const token = await getIdToken(user);
 	const res = await fetchFn(
 		`${endpoint}?${new URLSearchParams(params as Record<string, string>).toString()}`,
 		{
 			method: 'GET',
 			headers: new Headers({
-				Authorization: `Bearer ${token}`
+				Authorization: `Bearer none`
 			})
 		}
 	);
